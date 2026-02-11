@@ -1,3 +1,4 @@
+//components/FinanceBanner.tsx
 type FinanceBannerProps = {
   phoneNumber: string;
   imageUrl?: string;

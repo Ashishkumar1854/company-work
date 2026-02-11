@@ -1,6 +1,7 @@
+//components/HomeClient.tsx
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState, useEffect } from "react";
 import Link from "next/link";
 import type { PhoneItem } from "@/lib/api";
 import ActionButtons from "@/components/ActionButtons";
@@ -27,30 +28,32 @@ export default function HomeClient({
 }: HomeClientProps) {
   const [search, setSearch] = useState("");
   const [activeCompany, setActiveCompany] = useState("All");
-  const [activeType, setActiveType] = useState<"used" | "new" | "accessories">(
-    initialTab
-  );
+  const [activeType, setActiveType] =
+    useState<"used" | "new" | "accessories">(initialTab);
 
+  // ✅ company reset only when tab changes
   useEffect(() => {
     setActiveCompany("All");
   }, [activeType]);
 
-  const currentList =
-    activeType === "new"
-      ? newPhones
-      : activeType === "accessories"
-      ? accessories
-      : usedPhones;
+  const currentList: PhoneItem[] = useMemo(() => {
+    if (activeType === "new") return newPhones;
+    if (activeType === "accessories") return accessories;
+    return usedPhones;
+  }, [activeType, usedPhones, newPhones, accessories]);
 
   const companies = useMemo(() => {
-    const list = Array.from(
-      new Set(currentList.map((item) => item.company).filter(Boolean))
-    );
-    return ["All", ...list];
+    return [
+      "All",
+      ...Array.from(
+        new Set(currentList.map((item) => item.company).filter(Boolean))
+      ),
+    ];
   }, [currentList]);
 
   const filtered = useMemo(() => {
     const query = search.trim().toLowerCase();
+
     return currentList
       .filter((item) =>
         activeCompany === "All" ? true : item.company === activeCompany
@@ -104,7 +107,7 @@ export default function HomeClient({
 
       {filtered.length === 0 && (
         <div className="rounded-2xl border border-dashed border-black/20 bg-white px-4 py-8 text-center text-sm text-zinc-500">
-          No items found. Try a different search or company.
+          No items found.
         </div>
       )}
     </div>

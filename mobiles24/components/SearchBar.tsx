@@ -1,3 +1,4 @@
+//components/SearchBar.tsx
 type SearchBarProps = {
   value: string;
   onChange: (value: string) => void;

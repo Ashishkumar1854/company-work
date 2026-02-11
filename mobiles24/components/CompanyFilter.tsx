@@ -1,3 +1,4 @@
+//components/CompanyFilter.tsx
 type CompanyFilterProps = {
   companies: string[];
   active: string;

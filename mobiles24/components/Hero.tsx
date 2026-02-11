@@ -1,3 +1,4 @@
+//components/Hero.tsx
 type HeroProps = {
   title: string;
   slogan: string;

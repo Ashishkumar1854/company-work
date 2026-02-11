@@ -1,3 +1,109 @@
+// //used phone and new phones done
+
+// "use client";
+
+// import { useEffect, useState } from "react";
+// import Navbar from "@/components/Navbar";
+// import Hero from "@/components/Hero";
+// import FinanceBanner from "@/components/FinanceBanner";
+// import HomeClient from "@/components/HomeClient";
+
+// import {
+//   API_ENDPOINTS,
+//   normalizeStoreInfo,
+//   normalizeUsedPhone,
+//   normalizeNewPhones,
+//   normalizeAccessoryItems,
+//   applySoldStatus,
+//   type PhoneItem,
+//   type StoreInfo,
+//   type SoldItem,
+// } from "@/lib/api";
+
+// type Props = {
+//   type: "used" | "new" | "accessory";
+// };
+
+// export default function ListingPageClient({ type }: Props) {
+//   const [store, setStore] = useState<StoreInfo | null>(null);
+//   const [usedPhones, setUsedPhones] = useState<PhoneItem[]>([]);
+//   const [newPhones, setNewPhones] = useState<PhoneItem[]>([]);
+//   const [accessories, setAccessories] = useState<PhoneItem[]>([]);
+//   const [loading, setLoading] = useState(true);
+
+//   useEffect(() => {
+//     let active = true;
+
+//     async function load() {
+//       try {
+//         const [storeRes, oiRes, npRes, soldRes] = await Promise.all([
+//           fetch(API_ENDPOINTS.store).then(r => r.json()),
+//           fetch(API_ENDPOINTS.storeOI).then(r => r.json()),
+//           fetch(API_ENDPOINTS.storeNP).then(r => r.json()),
+//           fetch(API_ENDPOINTS.sold).then(r => r.json()),
+//         ]);
+
+//         if (!active) return;
+
+//         setStore(normalizeStoreInfo(storeRes));
+
+//         const used = applySoldStatus(
+//           (storeRes.used_phones || []).map(normalizeUsedPhone),
+//           soldRes as SoldItem[]
+//         );
+
+//         setUsedPhones(used);
+//         setNewPhones(normalizeNewPhones(npRes));
+//         setAccessories(normalizeAccessoryItems(oiRes));
+
+//       } catch (e) {
+//         console.error("Listing load error:", e);
+//       } finally {
+//         if (active) setLoading(false);
+//       }
+//     }
+
+//     load();
+//     return () => {
+//       active = false;
+//     };
+//   }, []);
+
+//   if (loading || !store) return null;
+
+//   return (
+//     <div className="min-h-screen bg-[#f7f4ef]">
+//       <Navbar storeName={store.name} />
+
+//       <main className="mx-auto max-w-6xl px-4 py-6 space-y-6">
+//         <Hero
+//           title={store.name}
+//           slogan={store.slogan}
+//           description={store.description}
+//           imageUrl={store.bannerUrl}
+//         />
+
+//         <FinanceBanner phoneNumber="9039933984" />
+
+//         <HomeClient
+//           usedPhones={usedPhones}
+//           newPhones={newPhones}
+//           accessories={accessories}
+//           accessoriesCount={accessories.length}
+//           initialTab={
+//             type === "new"
+//               ? "new"
+//               : type === "accessory"
+//               ? "accessories"
+//               : "used"
+//           }
+//         />
+//       </main>
+//     </div>
+//   );
+// }
+
+
 "use client";
 
 import { useEffect, useState } from "react";
@@ -5,184 +111,115 @@ import Navbar from "@/components/Navbar";
 import Hero from "@/components/Hero";
 import FinanceBanner from "@/components/FinanceBanner";
 import HomeClient from "@/components/HomeClient";
+
 import {
   API_ENDPOINTS,
-  applySoldStatus,
-  getAccessoriesCount,
-  isAccessory,
-  normalizeAccessoryItems,
-  normalizeNewPhones,
   normalizeStoreInfo,
   normalizeUsedPhone,
+  normalizeNewPhones,
+  normalizeAccessoryItems,
+  applySoldStatus,
   type PhoneItem,
-  type SoldItem,
   type StoreInfo,
+  type SoldItem,
 } from "@/lib/api";
 
-type ListingPageClientProps = {
-  initialTab?: "used" | "new" | "accessories";
-  showActions?: boolean;
-  heroTitle?: string;
-  heroSlogan?: string;
-  heroDescription?: string;
+type Props = {
+  type: "used" | "new" | "accessory";
 };
 
-type LoadState = {
-  store: StoreInfo | null;
-  usedPhones: PhoneItem[];
-  newPhones: PhoneItem[];
-  accessories: PhoneItem[];
-  accessoriesCount: number;
-  loading: boolean;
-  error: string | null;
-};
-
-export default function ListingPageClient({
-  initialTab = "used",
-  showActions = true,
-  heroTitle,
-  heroSlogan,
-  heroDescription,
-}: ListingPageClientProps) {
-  const [state, setState] = useState<LoadState>({
-    store: null,
-    usedPhones: [],
-    newPhones: [],
-    accessories: [],
-    accessoriesCount: 0,
-    loading: true,
-    error: null,
-  });
+export default function ListingPageClient({ type }: Props) {
+  const [store, setStore] = useState<StoreInfo | null>(null);
+  const [usedPhones, setUsedPhones] = useState<PhoneItem[]>([]);
+  const [newPhones, setNewPhones] = useState<PhoneItem[]>([]);
+  const [accessories, setAccessories] = useState<PhoneItem[]>([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     let active = true;
-    const load = async () => {
+
+    async function load() {
       try {
-        const [storeRes, storeOIRes, storeNPRes, soldRes] = await Promise.all([
-          fetch(API_ENDPOINTS.store, { cache: "no-store" }),
-          fetch(API_ENDPOINTS.storeOI, { cache: "no-store" }),
-          fetch(API_ENDPOINTS.storeNP, { cache: "no-store" }),
-          fetch(API_ENDPOINTS.sold, { cache: "no-store" }),
+        console.log("========== API CALL START ==========");
+
+        const [storeRes, oiRes, npRes, soldRes] = await Promise.all([
+          fetch(API_ENDPOINTS.store).then((r) => r.json()),
+          fetch(API_ENDPOINTS.storeOI).then((r) => r.json()), // ✅ ACCESSORIES SOURCE
+          fetch(API_ENDPOINTS.storeNP).then((r) => r.json()),
+          fetch(API_ENDPOINTS.sold).then((r) => r.json()),
         ]);
 
-        const [storeData, storeOIData, storeNPData, soldData] =
-          await Promise.all([
-            storeRes.json(),
-            storeOIRes.json(),
-            storeNPRes.json(),
-            soldRes.json(),
-          ]);
-
         if (!active) return;
 
-        const store = normalizeStoreInfo(storeData);
-        const usedPhonesRaw = Array.isArray(storeData?.used_phones)
-          ? storeData.used_phones
-          : Array.isArray(storeOIData?.used_phones)
-          ? storeOIData.used_phones
+        // STORE
+        setStore(normalizeStoreInfo(storeRes));
+
+        // USED
+        const usedRaw = Array.isArray(storeRes?.used_phones)
+          ? storeRes.used_phones
           : [];
-        const usedPhones = usedPhonesRaw.map(normalizeUsedPhone);
-        const accessoriesList = normalizeAccessoryItems(storeOIData);
-        const newPhones = normalizeNewPhones(storeNPData);
-        const soldItems = Array.isArray(soldData) ? (soldData as SoldItem[]) : [];
-        const usedPhonesWithSold = applySoldStatus(usedPhones, soldItems);
-        const accessoriesFallback = usedPhonesWithSold.filter((item) =>
-          isAccessory(item, store.categories || [])
+
+        const used = applySoldStatus(
+          usedRaw.map(normalizeUsedPhone),
+          soldRes as SoldItem[]
         );
-        const accessories =
-          accessoriesList.length > 0 ? accessoriesList : accessoriesFallback;
-        const accessoriesCount =
-          accessoriesList.length > 0
-            ? accessoriesList.length
-            : getAccessoriesCount(storeData, usedPhonesWithSold, store.categories || []);
 
-        // storeOIData is fetched intentionally (as requested) for parity with reference API usage
-        void storeOIData;
+        // NEW (DON'T TOUCH)
+        const newPhonesData = normalizeNewPhones(npRes);
 
-        setState({
-          store,
-          usedPhones: usedPhonesWithSold,
-          newPhones,
-          accessories,
-          accessoriesCount,
-          loading: false,
-          error: null,
-        });
-      } catch (err: any) {
-        if (!active) return;
-        setState((prev) => ({
-          ...prev,
-          loading: false,
-          error: err?.message || "Failed to load data",
-        }));
+        // ✅ ACCESSORIES (REAL + STABLE)
+        const accessoriesData = normalizeAccessoryItems(
+          Array.isArray(oiRes?.items) ? oiRes.items : []
+        );
+
+        console.log("🟢 ACCESSORIES FINAL COUNT:", accessoriesData.length);
+
+        setUsedPhones(used);
+        setNewPhones(newPhonesData);
+        setAccessories(accessoriesData);
+
+        console.log("========== API CALL END ==========");
+      } catch (e) {
+        console.error("Listing load error:", e);
+      } finally {
+        if (active) setLoading(false);
       }
-    };
+    }
+
     load();
     return () => {
       active = false;
     };
   }, []);
 
-  if (state.loading) {
-    return (
-      <div className="min-h-screen bg-[#f7f4ef]">
-        <Navbar storeName="Mobiles24" />
-        <main className="mx-auto flex max-w-6xl flex-col gap-6 px-4 py-6 sm:px-6">
-          <div className="h-40 rounded-3xl bg-zinc-200 animate-pulse" />
-          <div className="h-20 rounded-3xl bg-zinc-200 animate-pulse" />
-          <div className="h-14 rounded-2xl bg-zinc-200 animate-pulse" />
-          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
-            {Array.from({ length: 6 }).map((_, i) => (
-              <div key={i} className="h-32 rounded-3xl bg-zinc-200 animate-pulse" />
-            ))}
-          </div>
-        </main>
-      </div>
-    );
-  }
-
-  if (state.error || !state.store) {
-    return (
-      <div className="min-h-screen bg-[#f7f4ef]">
-        <Navbar storeName="Mobiles24" />
-        <main className="mx-auto flex max-w-3xl flex-col gap-6 px-4 py-10 sm:px-6">
-          <div className="rounded-3xl bg-white px-6 py-8 text-center shadow-sm">
-            <h1 className="font-display text-2xl font-semibold">
-              Failed to load
-            </h1>
-            <p className="text-sm text-zinc-500">
-              {state.error || "Unable to fetch APIs"}
-            </p>
-          </div>
-        </main>
-      </div>
-    );
-  }
-
-  const title = heroTitle || state.store.name;
-  const slogan = heroSlogan || state.store.slogan;
-  const description = heroDescription || state.store.description;
-
-  const accessories = state.accessories || [];
+  if (loading || !store) return null;
 
   return (
     <div className="min-h-screen bg-[#f7f4ef]">
-      <Navbar storeName={state.store.name} />
-      <main className="mx-auto flex max-w-6xl flex-col gap-6 px-4 py-6 sm:px-6">
+      <Navbar storeName={store.name} />
+
+      <main className="mx-auto max-w-6xl px-4 py-6 space-y-6">
         <Hero
-          title={title}
-          slogan={slogan}
-          description={description}
-          imageUrl={state.store.bannerUrl}
+          title={store.name}
+          slogan={store.slogan}
+          description={store.description}
+          imageUrl={store.bannerUrl}
         />
-        <FinanceBanner phoneNumber="9039933984" imageUrl="/group-3193.webp" />
+
+        <FinanceBanner phoneNumber="9039933984" />
+
         <HomeClient
-          usedPhones={state.usedPhones}
-          newPhones={state.newPhones}
+          usedPhones={usedPhones}
+          newPhones={newPhones}
           accessories={accessories}
-          accessoriesCount={state.accessoriesCount}
-          initialTab={initialTab}
-          showActions={showActions}
+          accessoriesCount={accessories.length}
+          initialTab={
+            type === "new"
+              ? "new"
+              : type === "accessory"
+              ? "accessories"
+              : "used"
+          }
         />
       </main>
     </div>

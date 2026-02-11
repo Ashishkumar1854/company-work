@@ -1,3 +1,4 @@
+//components/WishlistClient.tsx
 "use client";
 
 import PhoneCard from "@/components/PhoneCard";

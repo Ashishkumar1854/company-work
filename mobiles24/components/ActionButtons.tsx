@@ -1,3 +1,4 @@
+//components/ActionButtons.tsx
 type ActionButtonsProps = {
   usedPhonesCount: number;
   newPhonesCount: number;

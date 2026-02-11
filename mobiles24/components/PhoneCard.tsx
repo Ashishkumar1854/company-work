@@ -1,3 +1,4 @@
+//components/PhoneCard.tsx
 "use client";
 
 import Image from "next/image";
