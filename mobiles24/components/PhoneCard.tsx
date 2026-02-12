@@ -2,6 +2,7 @@
 "use client";
 
 import Image from "next/image";
+import { Heart } from "lucide-react";
 import type { PhoneItem } from "@/lib/api";
 import { useWishlist } from "@/components/WishlistProvider";
 
@@ -95,15 +96,23 @@ export default function PhoneCard({ phone }: PhoneCardProps) {
                 if (phone.isSold) return;
                 toggle(phone);
               }}
-              className={`rounded-full border px-2 py-1 text-[10px] font-semibold transition ${
+              aria-label={
                 phone.isSold
-                  ? "border-black/10 text-zinc-400"
+                  ? "Sold product"
+                  : liked
+                    ? "Remove from wishlist"
+                    : "Add to wishlist"
+              }
+              title={liked ? "Wishlisted" : "Wishlist"}
+              className={`flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full border transition ${
+                phone.isSold
+                  ? "cursor-not-allowed border-black/10 text-zinc-400"
                   : liked
                     ? "border-black bg-black text-white"
-                    : "border-black/10"
+                    : "border-black/10 text-zinc-700 hover:bg-zinc-50"
               }`}
             >
-              {phone.isSold ? "Sold" : liked ? "Wishlisted" : "Wishlist"}
+              <Heart size={14} className={liked ? "fill-current" : ""} />
             </button>
           </div>
 

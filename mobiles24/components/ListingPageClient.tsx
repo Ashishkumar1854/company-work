@@ -1,108 +1,5 @@
 // //used phone and new phones done
 
-// "use client";
-
-// import { useEffect, useState } from "react";
-// import Navbar from "@/components/Navbar";
-// import Hero from "@/components/Hero";
-// import FinanceBanner from "@/components/FinanceBanner";
-// import HomeClient from "@/components/HomeClient";
-
-// import {
-//   API_ENDPOINTS,
-//   normalizeStoreInfo,
-//   normalizeUsedPhone,
-//   normalizeNewPhones,
-//   normalizeAccessoryItems,
-//   applySoldStatus,
-//   type PhoneItem,
-//   type StoreInfo,
-//   type SoldItem,
-// } from "@/lib/api";
-
-// type Props = {
-//   type: "used" | "new" | "accessory";
-// };
-
-// export default function ListingPageClient({ type }: Props) {
-//   const [store, setStore] = useState<StoreInfo | null>(null);
-//   const [usedPhones, setUsedPhones] = useState<PhoneItem[]>([]);
-//   const [newPhones, setNewPhones] = useState<PhoneItem[]>([]);
-//   const [accessories, setAccessories] = useState<PhoneItem[]>([]);
-//   const [loading, setLoading] = useState(true);
-
-//   useEffect(() => {
-//     let active = true;
-
-//     async function load() {
-//       try {
-//         const [storeRes, oiRes, npRes, soldRes] = await Promise.all([
-//           fetch(API_ENDPOINTS.store).then(r => r.json()),
-//           fetch(API_ENDPOINTS.storeOI).then(r => r.json()),
-//           fetch(API_ENDPOINTS.storeNP).then(r => r.json()),
-//           fetch(API_ENDPOINTS.sold).then(r => r.json()),
-//         ]);
-
-//         if (!active) return;
-
-//         setStore(normalizeStoreInfo(storeRes));
-
-//         const used = applySoldStatus(
-//           (storeRes.used_phones || []).map(normalizeUsedPhone),
-//           soldRes as SoldItem[]
-//         );
-
-//         setUsedPhones(used);
-//         setNewPhones(normalizeNewPhones(npRes));
-//         setAccessories(normalizeAccessoryItems(oiRes));
-
-//       } catch (e) {
-//         console.error("Listing load error:", e);
-//       } finally {
-//         if (active) setLoading(false);
-//       }
-//     }
-
-//     load();
-//     return () => {
-//       active = false;
-//     };
-//   }, []);
-
-//   if (loading || !store) return null;
-
-//   return (
-//     <div className="min-h-screen bg-[#f7f4ef]">
-//       <Navbar storeName={store.name} />
-
-//       <main className="mx-auto max-w-6xl px-4 py-6 space-y-6">
-//         <Hero
-//           title={store.name}
-//           slogan={store.slogan}
-//           description={store.description}
-//           imageUrl={store.bannerUrl}
-//         />
-
-//         <FinanceBanner phoneNumber="9039933984" />
-
-//         <HomeClient
-//           usedPhones={usedPhones}
-//           newPhones={newPhones}
-//           accessories={accessories}
-//           accessoriesCount={accessories.length}
-//           initialTab={
-//             type === "new"
-//               ? "new"
-//               : type === "accessory"
-//               ? "accessories"
-//               : "used"
-//           }
-//         />
-//       </main>
-//     </div>
-//   );
-// }
-
 "use client";
 
 import { useEffect, useState, useMemo } from "react";
@@ -110,6 +7,7 @@ import Navbar from "@/components/Navbar";
 import Hero from "@/components/Hero";
 import FinanceBanner from "@/components/FinanceBanner";
 import HomeClient from "@/components/HomeClient";
+import StoreFooter from "@/components/StoreFooter";
 
 import {
   API_ENDPOINTS,
@@ -336,7 +234,7 @@ export default function ListingPageClient({ type }: Props) {
     <div className="min-h-screen bg-[#f7f4ef]">
       <Navbar storeName={store.name} />
 
-      <main className="mx-auto max-w-6xl px-4 py-6 space-y-6">
+      <main className="mx-auto max-w-6xl space-y-6 px-4 pt-6 pb-0">
         <Hero
           title={store.name}
           slogan={store.slogan}
@@ -357,6 +255,14 @@ export default function ListingPageClient({ type }: Props) {
           accessoriesCount={filteredAccessories.length}
           initialTab={type}
         />
+
+        <div className="mt-2">
+          <StoreFooter
+            storeName={store.name}
+            address={store.description}
+            social={store.social}
+          />
+        </div>
       </main>
     </div>
   );

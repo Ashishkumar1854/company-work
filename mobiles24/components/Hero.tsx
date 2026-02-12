@@ -1,131 +1,4 @@
 //components/Hero.tsx
-// "use client";
-
-// import { useState } from "react";
-// import { Facebook, Youtube, Phone, MapPin } from "lucide-react";
-
-// type HeroProps = {
-//   title: string;
-//   slogan: string;
-//   description: string;
-//   imageUrl?: string;
-
-//   categories?: { id: number; name: string }[];
-//   financeEnabled?: boolean;
-
-//   social?: {
-//     instagram?: string;
-//     youtube?: string;
-//     facebook?: string;
-//     google?: string;
-//     whatsapp?: string;
-//   };
-
-//   onCategorySelect?: (id: number | null) => void;
-// };
-
-// export default function Hero({
-//   title,
-//   slogan,
-//   description,
-//   imageUrl,
-//   categories = [],
-//   financeEnabled,
-//   social,
-//   onCategorySelect,
-// }: HeroProps) {
-//   const [activeCategoryId, setActiveCategoryId] = useState<number | null>(null);
-
-//   return (
-//     <section
-//       className="relative overflow-hidden rounded-3xl bg-black text-white shadow-lg"
-//       style={
-//         imageUrl
-//           ? {
-//               backgroundImage: `linear-gradient(90deg, rgba(0,0,0,0.75), rgba(0,0,0,0.4)), url(${imageUrl})`,
-//               backgroundSize: "cover",
-//               backgroundPosition: "center",
-//             }
-//           : undefined
-//       }
-//     >
-//       <div className="relative px-6 py-12 space-y-4">
-//         <h1 className="text-4xl font-semibold tracking-tight">{title}</h1>
-//         <p className="text-2xl text-white/90">{slogan}</p>
-
-//         <div className="flex items-center gap-2 text-white/70 text-sm">
-//           <MapPin size={16} />
-//           {description}
-//         </div>
-
-//         {financeEnabled && (
-//           <div className="inline-block rounded-full bg-emerald-500 px-4 py-2 text-sm font-semibold">
-//             Easy Finance Available
-//           </div>
-//         )}
-
-//         {/* CATEGORY CHIPS (AUTO HIDE IF NO PRODUCT) */}
-//         {categories.length > 0 && (
-//           <div className="flex flex-wrap gap-2 pt-3">
-//             {categories.map((cat) => (
-//               <button
-//                 key={cat.id}
-//                 onClick={() => {
-//                   const newId = activeCategoryId === cat.id ? null : cat.id;
-
-//                   setActiveCategoryId(newId);
-//                   onCategorySelect?.(newId);
-//                 }}
-//                 className={`px-4 py-1 rounded-full text-xs font-medium transition ${
-//                   activeCategoryId === cat.id
-//                     ? "bg-white text-black"
-//                     : "bg-white/10 hover:bg-white/20"
-//                 }`}
-//               >
-//                 {cat.name}
-//               </button>
-//             ))}
-//           </div>
-//         )}
-//       </div>
-
-//       {/* RIGHT VERTICAL ICONS */}
-//       <div className="absolute right-4 top-1/2 -translate-y-1/2 flex flex-col gap-4">
-//         {social?.whatsapp && (
-//           <a href={social.whatsapp} target="_blank">
-//             <div className="h-14 w-14 bg-white rounded-full flex items-center justify-center shadow-lg">
-//               <Phone className="text-green-600" />
-//             </div>
-//           </a>
-//         )}
-
-//         {social?.google && (
-//           <a href={social.google} target="_blank">
-//             <div className="h-14 w-14 bg-white rounded-full flex items-center justify-center shadow-lg">
-//               <MapPin className="text-red-500" />
-//             </div>
-//           </a>
-//         )}
-
-//         {social?.facebook && (
-//           <a href={social.facebook} target="_blank">
-//             <div className="h-14 w-14 bg-white rounded-full flex items-center justify-center shadow-lg">
-//               <Facebook className="text-blue-600" />
-//             </div>
-//           </a>
-//         )}
-
-//         {social?.youtube && (
-//           <a href={social.youtube} target="_blank">
-//             <div className="h-14 w-14 bg-white rounded-full flex items-center justify-center shadow-lg">
-//               <Youtube className="text-red-600" />
-//             </div>
-//           </a>
-//         )}
-//       </div>
-//     </section>
-//   );
-// }
 
 "use client";
 
@@ -147,6 +20,7 @@ type HeroProps = {
     whatsapp?: string;
   };
   onCategorySelect?: (id: number | null) => void;
+  phoneNumber?: string;
 };
 
 export default function Hero({
@@ -158,8 +32,12 @@ export default function Hero({
   financeEnabled,
   social,
   onCategorySelect,
+  phoneNumber = "9039933984",
 }: HeroProps) {
   const [activeCategoryId, setActiveCategoryId] = useState<number | null>(null);
+  const hasAnySocial = Boolean(
+    social?.whatsapp || social?.google || social?.facebook || social?.youtube,
+  );
 
   return (
     <section
@@ -174,17 +52,19 @@ export default function Hero({
           : undefined
       }
     >
-      <div className="relative px-6 py-12 space-y-4">
-        <h1 className="text-4xl font-semibold">{title}</h1>
-        <p className="text-2xl text-white/90">{slogan}</p>
+      <div className="relative space-y-3 px-5 py-7 pr-16 sm:px-6 sm:py-10 sm:pr-24 lg:py-12">
+        <h1 className="text-[2.1rem] font-semibold leading-none sm:text-4xl">
+          {title}
+        </h1>
+        <p className="text-[1.05rem] text-white/90 sm:text-2xl">{slogan}</p>
 
-        <div className="flex items-center gap-2 text-white/70 text-sm">
+        <div className="flex items-center gap-2 text-xs text-white/75 sm:text-sm">
           <MapPin size={16} />
-          {description}
+          <span className="line-clamp-2">{description}</span>
         </div>
 
         {financeEnabled && (
-          <div className="inline-block rounded-full bg-emerald-500 px-4 py-2 text-sm font-semibold">
+          <div className="inline-block rounded-full bg-emerald-500 px-4 py-2 text-xs font-semibold sm:text-sm">
             Easy Finance Available
           </div>
         )}
@@ -199,7 +79,7 @@ export default function Hero({
                   setActiveCategoryId(newId);
                   onCategorySelect?.(newId);
                 }}
-                className={`px-4 py-1 rounded-full text-xs font-medium transition ${
+                className={`rounded-full px-3 py-1 text-xs font-medium transition sm:px-4 ${
                   activeCategoryId === cat.id
                     ? "bg-white text-black"
                     : "bg-white/10 hover:bg-white/20"
@@ -210,47 +90,82 @@ export default function Hero({
             ))}
           </div>
         )}
+
+        {/* Mobile social chips */}
+        {hasAnySocial && (
+          <div className="flex flex-wrap gap-2 pt-1 sm:hidden">
+            {social?.google && (
+              <a
+                href={social.google}
+                target="_blank"
+                className="rounded-full bg-white px-3 py-1.5 text-xs font-medium text-black"
+              >
+                Google
+              </a>
+            )}
+            {social?.instagram && (
+              <a
+                href={social.instagram}
+                target="_blank"
+                className="rounded-full bg-pink-500 px-3 py-1.5 text-xs font-medium text-white"
+              >
+                Instagram
+              </a>
+            )}
+            {social?.whatsapp && (
+              <a
+                href={social.whatsapp}
+                target="_blank"
+                className="rounded-full bg-green-500 px-3 py-1.5 text-xs font-medium text-white"
+              >
+                WhatsApp
+              </a>
+            )}
+          </div>
+        )}
       </div>
 
-      {/* Vertical Icons */}
-      <div className="absolute right-4 top-1/2 -translate-y-1/2 flex flex-col gap-4">
-        {social?.whatsapp && (
-          <a href={social.whatsapp} target="_blank">
-            <div className="h-14 w-14 bg-white rounded-full flex items-center justify-center">
-              <Phone className="text-green-600" />
-            </div>
-          </a>
-        )}
-        {social?.google && (
-          <a href={social.google} target="_blank">
-            <div className="h-14 w-14 bg-white rounded-full flex items-center justify-center">
-              <MapPin className="text-red-500" />
-            </div>
-          </a>
-        )}
-        {social?.facebook && (
-          <a href={social.facebook} target="_blank">
-            <div className="h-14 w-14 bg-white rounded-full flex items-center justify-center">
-              <Facebook className="text-blue-600" />
-            </div>
-          </a>
-        )}
-        {social?.youtube && (
-          <a href={social.youtube} target="_blank">
-            <div className="h-14 w-14 bg-white rounded-full flex items-center justify-center">
-              <Youtube className="text-red-600" />
-            </div>
-          </a>
-        )}
-      </div>
+      {/* Vertical social icons (mobile + desktop) */}
+      {hasAnySocial && (
+        <div className="absolute right-3 top-1/2 flex -translate-y-1/2 flex-col gap-2.5 sm:right-4 sm:gap-3">
+          {phoneNumber && (
+            <a href={`tel:${phoneNumber}`}>
+              <div className="flex h-10 w-10 items-center justify-center rounded-full bg-white shadow-md sm:h-12 sm:w-12">
+                <Phone className="h-5 w-5 text-green-600 sm:h-6 sm:w-6" />
+              </div>
+            </a>
+          )}
+          {social?.google && (
+            <a href={social.google} target="_blank">
+              <div className="flex h-10 w-10 items-center justify-center rounded-full bg-white shadow-md sm:h-12 sm:w-12">
+                <MapPin className="h-5 w-5 text-red-500 sm:h-6 sm:w-6" />
+              </div>
+            </a>
+          )}
+          {social?.facebook && (
+            <a href={social.facebook} target="_blank">
+              <div className="flex h-10 w-10 items-center justify-center rounded-full bg-white shadow-md sm:h-12 sm:w-12">
+                <Facebook className="h-5 w-5 text-blue-600 sm:h-6 sm:w-6" />
+              </div>
+            </a>
+          )}
+          {social?.youtube && (
+            <a href={social.youtube} target="_blank">
+              <div className="flex h-10 w-10 items-center justify-center rounded-full bg-white shadow-md sm:h-12 sm:w-12">
+                <Youtube className="h-5 w-5 text-red-600 sm:h-6 sm:w-6" />
+              </div>
+            </a>
+          )}
+        </div>
+      )}
 
-      {/* Horizontal Icons ALWAYS visible */}
-      <div className="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-3">
+      {/* Desktop horizontal chips */}
+      <div className="absolute bottom-4 left-6 hidden gap-3 sm:flex">
         {social?.google && (
           <a
             href={social.google}
             target="_blank"
-            className="bg-white text-black px-4 py-2 rounded-full text-sm"
+            className="rounded-full bg-white px-4 py-2 text-sm text-black"
           >
             Google
           </a>
@@ -259,7 +174,7 @@ export default function Hero({
           <a
             href={social.instagram}
             target="_blank"
-            className="bg-pink-500 px-4 py-2 rounded-full text-sm"
+            className="rounded-full bg-pink-500 px-4 py-2 text-sm"
           >
             Instagram
           </a>
@@ -268,7 +183,7 @@ export default function Hero({
           <a
             href={social.whatsapp}
             target="_blank"
-            className="bg-green-500 px-4 py-2 rounded-full text-sm"
+            className="rounded-full bg-green-500 px-4 py-2 text-sm"
           >
             WhatsApp
           </a>
