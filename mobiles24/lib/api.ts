@@ -161,6 +161,7 @@
 export const API_ENDPOINTS = {
   store: "https://super.phoneo.in/api/v3/store/mobiles24",
   storeOI: "https://super.phoneo.in/api/v3/storeOI/mobiles24",
+  storeOIProxy: "/api/mobiles24/accessories",
   storeNP: "https://super.phoneo.in/api/v3/storeNP/mobiles24",
   sold: "https://super.phoneo.in/api/v3/store/mobiles24/sold",
 };
@@ -172,6 +173,18 @@ export type StoreInfo = {
   slogan: string;
   description: string;
   bannerUrl?: string;
+
+  categories: { id: number; name: string }[];
+  financeEnabled: boolean;
+
+  social: {
+    instagram?: string;
+    youtube?: string;
+    facebook?: string;
+    google?: string;
+    whatsapp?: string;
+  };
+
   raw: any;
 };
 
@@ -196,7 +209,7 @@ export type SoldItem = {
 const str = (v: any) =>
   typeof v === "string" || typeof v === "number" ? String(v) : "";
 
-/* ================= IMAGE NORMALIZER (🔥 REQUIRED) ================= */
+/* ================= IMAGE NORMALIZER ================= */
 
 export function normalizeImageUrl(url?: string): string {
   if (!url) return "https://phoneo.site/placeholder-phone.png";
@@ -204,21 +217,52 @@ export function normalizeImageUrl(url?: string): string {
   return `https://phoneo.site${url.startsWith("/") ? "" : "/"}${url}`;
 }
 
+/* ================= PWEB PARSE ================= */
+
+function parsePWeb(raw?: string) {
+  if (!raw) return {};
+  try {
+    return JSON.parse(raw);
+  } catch {
+    return {};
+  }
+}
+
 /* ================= STORE ================= */
 
 export function normalizeStoreInfo(data: any): StoreInfo {
+  const pweb = parsePWeb(data?.PWebDetails);
+
   return {
     name: str(data?.ShopName || "Mobiles24"),
-    slogan: str(data?.Slogan || "Best Deal Every Day 😄"),
+    slogan: str(data?.Slogan || ""),
     description: str(data?.Address || ""),
     bannerUrl: normalizeImageUrl(
       data?.Banner || data?.Cover || data?.Thumb
     ),
+
+    categories: Array.isArray(data?.categories)
+      ? data.categories.map((c: any) => ({
+          id: c.id,
+          name: str(c.Name),
+        }))
+      : [],
+
+    financeEnabled: str(data?.Finance) === "1",
+
+    social: {
+      instagram: data?.InstaLink,
+      youtube: pweb?.YoutubeLink,
+      facebook: pweb?.FacebookLink,
+      google: pweb?.GoogleReviewLink,
+      whatsapp: pweb?.WhatsAppChannelLink,
+    },
+
     raw: data,
   };
 }
 
-/* ================= USED PHONES (✅ FINAL FIX) ================= */
+/* ================= USED PHONES (UNCHANGED WORKING) ================= */
 
 export function normalizeUsedPhone(item: any): PhoneItem {
   const img =
@@ -238,7 +282,7 @@ export function normalizeUsedPhone(item: any): PhoneItem {
   };
 }
 
-/* ================= NEW PHONES (✅ VARIANTS VISIBLE) ================= */
+/* ================= NEW PHONES (UNCHANGED) ================= */
 
 function pickNewPhoneImage(p: any, v: any): string {
   return normalizeImageUrl(
@@ -256,7 +300,6 @@ export function normalizeNewPhones(storeNP: any): PhoneItem[] {
   for (const p of products) {
     const variants = Array.isArray(p.variant) ? p.variant : [];
 
-    // 🔥 EACH VARIANT = 1 CARD
     for (const v of variants) {
       out.push({
         id: `new-${p.id}-${v.id}`,
@@ -274,7 +317,7 @@ export function normalizeNewPhones(storeNP: any): PhoneItem[] {
   return out;
 }
 
-/* ================= ACCESSORIES (✅ FINAL & CORRECT) ================= */
+/* ================= ACCESSORIES (⚠️ EXACT SAME AS YOUR OLD WORKING CODE) ================= */
 
 export function normalizeAccessoryItems(items: any[]): PhoneItem[] {
   const list = Array.isArray(items) ? items : [];

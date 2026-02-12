@@ -28,10 +28,16 @@ export default function HomeClient({
 }: HomeClientProps) {
   const [search, setSearch] = useState("");
   const [activeCompany, setActiveCompany] = useState("All");
-  const [activeType, setActiveType] =
-    useState<"used" | "new" | "accessories">(initialTab);
+  const [activeType, setActiveType] = useState<"used" | "new" | "accessories">(
+    initialTab,
+  );
 
-  // ✅ company reset only when tab changes
+  /* ✅ FIX: Sync activeType when route (initialTab) changes */
+  useEffect(() => {
+    setActiveType(initialTab);
+  }, [initialTab]);
+
+  /* ✅ Reset company only when tab changes */
   useEffect(() => {
     setActiveCompany("All");
   }, [activeType]);
@@ -46,7 +52,7 @@ export default function HomeClient({
     return [
       "All",
       ...Array.from(
-        new Set(currentList.map((item) => item.company).filter(Boolean))
+        new Set(currentList.map((item) => item.company).filter(Boolean)),
       ),
     ];
   }, [currentList]);
@@ -56,7 +62,7 @@ export default function HomeClient({
 
     return currentList
       .filter((item) =>
-        activeCompany === "All" ? true : item.company === activeCompany
+        activeCompany === "All" ? true : item.company === activeCompany,
       )
       .filter((item) => {
         if (!query) return true;
@@ -75,7 +81,6 @@ export default function HomeClient({
           newPhonesCount={newPhones.length}
           accessoriesCount={accessoriesCount}
           active={activeType}
-          onChange={setActiveType}
         />
       )}
 
@@ -97,8 +102,10 @@ export default function HomeClient({
           <Link
             key={phone.id}
             href={`/mobiles24/${encodeURIComponent(
-              phone.company || "brand"
-            )}/${encodeURIComponent(phone.model || "model")}/${phone.id}`}
+              phone.company?.trim() || "unknown",
+            )}/${encodeURIComponent(
+              phone.model?.trim() || "unknown",
+            )}/${phone.id}`}
           >
             <PhoneCard phone={phone} />
           </Link>

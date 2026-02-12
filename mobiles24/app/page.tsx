@@ -1,6 +1,6 @@
-// app/page.tsx
-import ListingPageClient from "@/components/ListingPageClient";
+//app/page.tsx
+import { redirect } from "next/navigation";
 
 export default function Page() {
-  return <ListingPageClient type="used" />;
+  redirect("/mobiles24");
 }

@@ -1,10 +1,13 @@
 //components/ActionButtons.tsx
+"use client";
+
+import Link from "next/link";
+
 type ActionButtonsProps = {
   usedPhonesCount: number;
   newPhonesCount: number;
   accessoriesCount: number;
   active: "used" | "new" | "accessories";
-  onChange: (value: "used" | "new" | "accessories") => void;
 };
 
 export default function ActionButtons({
@@ -12,17 +15,20 @@ export default function ActionButtons({
   newPhonesCount,
   accessoriesCount,
   active,
-  onChange,
 }: ActionButtonsProps) {
+  const baseStyle =
+    "flex items-center gap-3 rounded-2xl border px-4 py-3 text-left text-sm font-semibold transition";
+
   return (
     <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
-      <button
-        className={`flex items-center gap-3 rounded-2xl border px-4 py-3 text-left text-sm font-semibold transition ${
+      {/* USED */}
+      <Link
+        href="/mobiles24"
+        className={`${baseStyle} ${
           active === "used"
             ? "border-black bg-black text-white"
             : "border-black/10 bg-white"
         }`}
-        onClick={() => onChange("used")}
       >
         <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-white/10 text-base">
           🔁
@@ -37,14 +43,16 @@ export default function ActionButtons({
             {usedPhonesCount} items
           </div>
         </span>
-      </button>
-      <button
-        className={`flex items-center gap-3 rounded-2xl border px-4 py-3 text-left text-sm font-semibold transition ${
+      </Link>
+
+      {/* NEW */}
+      <Link
+        href="/mobiles24/new"
+        className={`${baseStyle} ${
           active === "new"
             ? "border-black bg-black text-white"
             : "border-black/10 bg-white"
         }`}
-        onClick={() => onChange("new")}
       >
         <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-white/10 text-base">
           📱
@@ -59,14 +67,16 @@ export default function ActionButtons({
             {newPhonesCount} items
           </div>
         </span>
-      </button>
-      <button
-        className={`flex items-center gap-3 rounded-2xl border px-4 py-3 text-left text-sm font-semibold transition ${
+      </Link>
+
+      {/* ACCESSORIES */}
+      <Link
+        href="/mobiles24/accessories"
+        className={`${baseStyle} ${
           active === "accessories"
             ? "border-black bg-black text-white"
             : "border-black/10 bg-white"
         }`}
-        onClick={() => onChange("accessories")}
       >
         <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-white/10 text-base">
           🎧
@@ -81,7 +91,7 @@ export default function ActionButtons({
             {accessoriesCount} items
           </div>
         </span>
-      </button>
+      </Link>
     </div>
   );
 }
