@@ -13,7 +13,10 @@ const badgeClasses: Record<BugStatus, string> = {
 };
 
 export default function BugItem({ item, onStatusChange, onDelete }: BugItemProps) {
-  const createdLabel = new Date(item.createdAt).toLocaleDateString();
+  const date = new Date(item.createdAt);
+  const createdLabel = Number.isNaN(date.getTime())
+    ? item.createdAt
+    : new Intl.DateTimeFormat("en-GB", { timeZone: "UTC" }).format(date);
 
   return (
     <div className="rounded-lg border border-slate-200 p-3 dark:border-slate-700">

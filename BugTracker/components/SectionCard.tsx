@@ -10,7 +10,7 @@ type SectionCardProps = {
 
 export default function SectionCard({ section, items, onStatusChange, onDeleteItem }: SectionCardProps) {
   return (
-    <section className="rounded-xl border border-slate-200 bg-white p-4 shadow-sm dark:border-slate-800 dark:bg-slate-900">
+    <section className="flex h-[360px] flex-col rounded-xl border border-slate-200 bg-white p-4 shadow-sm dark:border-slate-800 dark:bg-slate-900">
       <div className="mb-4 flex items-center justify-between gap-2">
         <h3 className="text-base font-semibold text-slate-900 dark:text-slate-100">{section.title}</h3>
         <span className="rounded-full bg-slate-100 px-2 py-1 text-xs font-medium text-slate-700 dark:bg-slate-800 dark:text-slate-300">
@@ -18,7 +18,7 @@ export default function SectionCard({ section, items, onStatusChange, onDeleteIt
         </span>
       </div>
 
-      <div className="space-y-3">
+      <div className="flex-1 space-y-3 overflow-y-auto pr-1">
         {items.length === 0 && <p className="text-sm text-slate-500 dark:text-slate-400">No items for current filter.</p>}
         {items.map((item) => (
           <BugItem

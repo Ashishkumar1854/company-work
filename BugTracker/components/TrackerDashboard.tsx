@@ -2,15 +2,19 @@
 
 import { useEffect, useMemo, useState } from "react";
 import AddBugModal from "@/components/AddBugModal";
+import BugItem from "@/components/BugItem";
 import Footer from "@/components/Footer";
 import Navbar from "@/components/Navbar";
-import SectionCard from "@/components/SectionCard";
 import { initialSections } from "@/lib/initialData";
 import { loadSections, loadTheme, saveSections, saveTheme } from "@/lib/storage";
 import { BugStatus, ChecklistSection, StatusFilter } from "@/lib/types";
 
 function createId(prefix = "item") {
   return `${prefix}-${Date.now()}-${Math.random().toString(36).slice(2, 8)}`;
+}
+
+function createSectionId(title: string) {
+  return `section-${title.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/(^-|-$)/g, "") || Date.now().toString()}`;
 }
 
 export default function TrackerDashboard() {
@@ -54,30 +58,72 @@ export default function TrackerDashboard() {
     return { total, pending, bug, resolved, resolvedPct };
   }, [allItems]);
 
-  const filteredSections = useMemo(() => {
+  const filteredItems = useMemo(() => {
     const normalized = query.trim().toLowerCase();
 
-    return sections.map((section) => {
-      const items = section.items.filter((item) => {
-        const statusPass = filter === "all" || item.status === filter;
-        const searchPass = !normalized || item.title.toLowerCase().includes(normalized);
-        return statusPass && searchPass;
-      });
-
-      return { ...section, filteredItems: items };
-    });
+    return sections.flatMap((section) =>
+      section.items
+        .filter((item) => {
+          const statusPass = filter === "all" || item.status === filter;
+          const searchPass = !normalized || item.title.toLowerCase().includes(normalized);
+          return statusPass && searchPass;
+        })
+        .map((item) => ({ sectionId: section.id, sectionTitle: section.title, item }))
+    );
   }, [filter, query, sections]);
 
-  const handleAddItem = (sectionId: string, title: string) => {
-    setSections((current) =>
-      current.map((section) =>
-        section.id === sectionId
+  const handleAddItem = (sectionId: string, title: string, newSectionTitle?: string) => {
+    const trimmedSectionTitle = newSectionTitle?.trim();
+    const isCreateSection = sectionId === "__create_new_section__";
+    const resolvedSectionId = isCreateSection && trimmedSectionTitle ? createSectionId(trimmedSectionTitle) : sectionId;
+
+    setSections((current) => {
+      if (isCreateSection && trimmedSectionTitle) {
+        const existingSection = current.find((section) => section.title.toLowerCase() === trimmedSectionTitle.toLowerCase());
+        if (existingSection) {
+          return current.map((section) =>
+            section.id === existingSection.id
+              ? {
+                  ...section,
+                  items: [
+                    ...section.items,
+                    {
+                      id: createId(existingSection.id),
+                      title,
+                      status: "pending",
+                      createdAt: new Date().toISOString()
+                    }
+                  ]
+                }
+              : section
+          );
+        }
+
+        return [
+          ...current,
+          {
+            id: resolvedSectionId,
+            title: trimmedSectionTitle,
+            items: [
+              {
+                id: createId(resolvedSectionId),
+                title,
+                status: "pending",
+                createdAt: new Date().toISOString()
+              }
+            ]
+          }
+        ];
+      }
+
+      return current.map((section) =>
+        section.id === resolvedSectionId
           ? {
               ...section,
               items: [
                 ...section.items,
                 {
-                  id: createId(sectionId),
+                  id: createId(resolvedSectionId),
                   title,
                   status: "pending",
                   createdAt: new Date().toISOString()
@@ -85,17 +131,19 @@ export default function TrackerDashboard() {
               ]
             }
           : section
-      )
-    );
+      );
+    });
   };
 
   const handleDeleteItem = (sectionId: string, itemId: string) => {
     setSections((current) =>
-      current.map((section) =>
-        section.id === sectionId
-          ? { ...section, items: section.items.filter((item) => item.id !== itemId) }
-          : section
-      )
+      current
+        .map((section) =>
+          section.id === sectionId
+            ? { ...section, items: section.items.filter((item) => item.id !== itemId) }
+            : section
+        )
+        .filter((section) => section.items.length > 0)
     );
   };
 
@@ -182,17 +230,31 @@ export default function TrackerDashboard() {
           </div>
         </div>
 
-        <div className="mt-6 grid gap-4 md:grid-cols-2 xl:grid-cols-3">
-          {filteredSections.map((section) => (
-            <SectionCard
-              key={section.id}
-              section={section}
-              items={section.filteredItems}
-              onStatusChange={handleStatusChange}
-              onDeleteItem={handleDeleteItem}
-            />
+        <div className="mt-6 grid items-start gap-4 md:grid-cols-2 xl:grid-cols-3">
+          {filteredItems.map(({ sectionId, sectionTitle, item }) => (
+            <section
+              key={item.id}
+              className="rounded-xl border border-slate-200 bg-white p-4 shadow-sm dark:border-slate-800 dark:bg-slate-900"
+            >
+              <div className="mb-3 flex items-center justify-between gap-2">
+                <h3 className="text-sm font-semibold text-slate-900 dark:text-slate-100">{sectionTitle}</h3>
+                <span className="rounded-full bg-slate-100 px-2 py-1 text-xs font-medium text-slate-700 dark:bg-slate-800 dark:text-slate-300">
+                  Todo
+                </span>
+              </div>
+              <BugItem
+                item={item}
+                onStatusChange={(itemId, status) => handleStatusChange(sectionId, itemId, status)}
+                onDelete={(itemId) => handleDeleteItem(sectionId, itemId)}
+              />
+            </section>
           ))}
         </div>
+        {filteredItems.length === 0 && (
+          <div className="mt-6 rounded-xl border border-dashed border-slate-300 bg-white p-6 text-sm text-slate-600 dark:border-slate-700 dark:bg-slate-900 dark:text-slate-300">
+            No checklist items match the current filter. Add a new checklist item to continue.
+          </div>
+        )}
       </main>
 
       <Footer />

@@ -7,15 +7,19 @@ type AddBugModalProps = {
   isOpen: boolean;
   sections: ChecklistSection[];
   onClose: () => void;
-  onAdd: (sectionId: string, title: string) => void;
+  onAdd: (sectionId: string, title: string, newSectionTitle?: string) => void;
 };
+
+const CREATE_SECTION_VALUE = "__create_new_section__";
 
 export default function AddBugModal({ isOpen, sections, onClose, onAdd }: AddBugModalProps) {
   const [title, setTitle] = useState("");
   const [sectionId, setSectionId] = useState(sections[0]?.id ?? "");
+  const [newSectionTitle, setNewSectionTitle] = useState("");
 
   useEffect(() => {
     if (!sections.length) return;
+    if (sectionId === CREATE_SECTION_VALUE) return;
     if (!sectionId || !sections.some((section) => section.id === sectionId)) {
       setSectionId(sections[0].id);
     }
@@ -25,11 +29,14 @@ export default function AddBugModal({ isOpen, sections, onClose, onAdd }: AddBug
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    const trimmed = title.trim();
-    if (!trimmed || !sectionId) return;
+    const trimmedTitle = title.trim();
+    const trimmedSectionTitle = newSectionTitle.trim();
+    if (!trimmedTitle || !sectionId) return;
+    if (sectionId === CREATE_SECTION_VALUE && !trimmedSectionTitle) return;
 
-    onAdd(sectionId, trimmed);
+    onAdd(sectionId, trimmedTitle, trimmedSectionTitle);
     setTitle("");
+    setNewSectionTitle("");
     onClose();
   };
 
@@ -51,8 +58,22 @@ export default function AddBugModal({ isOpen, sections, onClose, onAdd }: AddBug
                   {section.title}
                 </option>
               ))}
+              <option value={CREATE_SECTION_VALUE}>+ Create New Section</option>
             </select>
           </div>
+
+          {sectionId === CREATE_SECTION_VALUE && (
+            <div>
+              <label className="mb-1 block text-sm font-medium text-slate-700 dark:text-slate-200">New Section</label>
+              <input
+                value={newSectionTitle}
+                onChange={(e) => setNewSectionTitle(e.target.value)}
+                placeholder="Example: Checkout Flow"
+                className="w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm text-slate-900 focus:border-brand-600 focus:outline-none dark:border-slate-700 dark:bg-slate-800 dark:text-slate-100"
+                required
+              />
+            </div>
+          )}
 
           <div>
             <label className="mb-1 block text-sm font-medium text-slate-700 dark:text-slate-200">Title</label>
