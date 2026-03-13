@@ -1,10 +1,13 @@
 //components/CompanyFilter.tsx
 import { useMemo, useState } from "react";
+import Image from "next/image";
+import { getBrandFallbackImage } from "@/lib/api";
 
 type CompanyFilterProps = {
   companies: string[];
   active: string;
   onSelect: (value: string) => void;
+  variant?: "default" | "accessories";
 };
 
 const BRAND_COLORS: Record<string, string> = {
@@ -25,6 +28,7 @@ export default function CompanyFilter({
   companies,
   active,
   onSelect,
+  variant = "default",
 }: CompanyFilterProps) {
   const [showAllMobile, setShowAllMobile] = useState(false);
 
@@ -47,6 +51,49 @@ export default function CompanyFilter({
   const renderChip = (company: string, compact = false) => {
     const color = BRAND_COLORS[company] || "#111111";
     const isActive = active === company;
+
+    if (variant === "accessories") {
+      const logo =
+        company === "All" ? "" : getBrandFallbackImage(company);
+      return (
+        <button
+          key={company}
+          className={`flex items-center overflow-hidden whitespace-nowrap rounded-full border bg-white shadow-sm transition ${
+            isActive ? "ring-2 ring-black/10" : ""
+          }`}
+          style={{
+            borderColor: "rgba(0,0,0,0.1)",
+          }}
+          onClick={() => onSelect(company)}
+        >
+          <span
+            className="flex h-11 w-12 items-center justify-center border-r border-black/10"
+            style={{
+              backgroundColor: company === "All" ? "#111111" : "#ffffff",
+            }}
+          >
+            {company === "All" ? (
+              <span className="text-sm text-white">★</span>
+            ) : (
+              <Image
+                src={logo}
+                alt={company}
+                width={28}
+                height={28}
+                className="h-7 w-7 object-contain"
+                unoptimized
+              />
+            )}
+          </span>
+          <span
+            className="px-5 py-2.5 text-sm font-medium text-white"
+            style={{ backgroundColor: color }}
+          >
+            {company}
+          </span>
+        </button>
+      );
+    }
 
     return (
       <button

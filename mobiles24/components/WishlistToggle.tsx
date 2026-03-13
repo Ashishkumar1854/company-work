@@ -23,11 +23,11 @@ export default function WishlistToggle({ phone }: WishlistToggleProps) {
         phone.isSold
           ? "border border-black/10 bg-zinc-100 text-zinc-400"
           : liked
-          ? "bg-black text-white"
-          : "border border-black/10 bg-white"
+            ? "bg-black text-white"
+            : "border border-black/10 bg-white"
       }`}
     >
-      {phone.isSold ? "Sold Out" : liked ? "Wishlisted" : "Add to Wishlist"}
+      {phone.isSold ? "Sold Out" : liked ? "Added" : "Add to Wishlist"}
     </button>
   );
 }

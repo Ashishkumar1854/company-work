@@ -232,21 +232,28 @@ export default function ListingPageClient({ type }: Props) {
 
   return (
     <div className="min-h-screen bg-[#f7f4ef]">
-      <Navbar storeName={store.name} />
+      <Navbar
+        storeName={store.name}
+        variant={type === "accessories" ? "accessories" : "default"}
+      />
 
       <main className="mx-auto max-w-6xl space-y-6 px-4 pt-6 pb-0">
-        <Hero
-          title={store.name}
-          slogan={store.slogan}
-          description={store.description}
-          imageUrl={store.bannerUrl}
-          categories={visibleCategories}
-          financeEnabled={store.financeEnabled}
-          social={store.social}
-          onCategorySelect={(id) => setSelectedCategoryId(id)}
-        />
+        {type !== "accessories" && (
+          <>
+            <Hero
+              title={store.name}
+              slogan={store.slogan}
+              description={store.description}
+              imageUrl={store.bannerUrl}
+              categories={visibleCategories}
+              financeEnabled={store.financeEnabled}
+              social={store.social}
+              onCategorySelect={(id) => setSelectedCategoryId(id)}
+            />
 
-        {store.financeEnabled && <FinanceBanner phoneNumber="9039933984" />}
+            {store.financeEnabled && <FinanceBanner phoneNumber="9039933984" />}
+          </>
+        )}
 
         <HomeClient
           usedPhones={filteredUsed}

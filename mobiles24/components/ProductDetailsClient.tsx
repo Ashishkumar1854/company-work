@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import Image from "next/image";
 import {
   BatteryCharging,
@@ -72,6 +72,132 @@ type PdResponse = {
   status?: boolean;
   data?: PdData;
 };
+
+function buildImageCandidates(src?: string): string[] {
+  const raw = String(src ?? "").trim();
+  const candidates: string[] = [];
+
+  if (!raw) {
+    return ["/placeholder-phone.svg"];
+  }
+
+  if (raw.startsWith("/api/") || raw.startsWith("/placeholder-")) {
+    return [raw];
+  }
+
+  const [basePath, query] = raw.split("?");
+  const withQuery = (value: string) => (query ? `${value}?${query}` : value);
+  const push = (value: string) => candidates.push(normalizeImageUrl(value));
+
+  if (raw.endsWith(".")) {
+    push(withQuery(`${basePath}webp`));
+    push(withQuery(`${basePath}jpg`));
+    push(withQuery(`${basePath}png`));
+  } else {
+    const lastSeg = basePath.split("/").pop() || "";
+    const hasExt = /\.[A-Za-z0-9]+$/.test(lastSeg);
+
+    if (!hasExt && !basePath.endsWith("/")) {
+      push(withQuery(`${basePath}.webp`));
+      push(withQuery(`${basePath}.jpg`));
+      push(withQuery(`${basePath}.png`));
+    }
+
+    if (/\.webp$/i.test(basePath)) {
+      const stem = basePath.replace(/\.webp$/i, "");
+      push(withQuery(`${stem}.jpg`));
+      push(withQuery(`${stem}.png`));
+    }
+
+    if (/\.svg$/i.test(basePath)) {
+      const stem = basePath.replace(/\.svg$/i, "");
+      push(withQuery(`${stem}.webp`));
+      push(withQuery(`${stem}.jpg`));
+      push(withQuery(`${stem}.png`));
+    }
+
+    push(raw);
+  }
+
+  candidates.push("/placeholder-phone.svg");
+  return Array.from(new Set(candidates));
+}
+
+function RelatedImage({
+  src,
+  alt,
+  sizes,
+  className,
+  brand,
+  model,
+}: {
+  src?: string;
+  alt: string;
+  sizes: string;
+  className?: string;
+  brand?: string;
+  model?: string;
+}) {
+  const candidates = useMemo(() => buildImageCandidates(src), [src]);
+  const [index, setIndex] = useState(0);
+  const [pdFallback, setPdFallback] = useState("");
+  const triedRef = useRef(false);
+  const current = candidates[index] || "/placeholder-phone.svg";
+
+  useEffect(() => {
+    if (current !== "/placeholder-phone.svg") return;
+    if (triedRef.current || pdFallback) return;
+    if (!brand || !model) return;
+
+    let active = true;
+    triedRef.current = true;
+
+    const load = async () => {
+      try {
+        const res = await fetch(
+          `/api/mobiles24/pd?brand=${encodeURIComponent(
+            brand,
+          )}&model=${encodeURIComponent(model)}`,
+          { cache: "no-store" },
+        );
+        if (!res.ok) return;
+        const json = await res.json();
+        const candidate =
+          json?.data?.thumbnail ||
+          json?.data?.phone_images?.[0] ||
+          "";
+        const safe = normalizeImageUrl(candidate);
+        if (active && safe && safe !== "/placeholder-phone.svg") {
+          setPdFallback(safe);
+        }
+      } catch {
+        // no-op
+      }
+    };
+
+    load();
+
+    return () => {
+      active = false;
+    };
+  }, [brand, current, model, pdFallback]);
+
+  return (
+    <Image
+      src={pdFallback || current}
+      alt={alt}
+      fill
+      sizes={sizes}
+      className={className}
+      unoptimized
+      onError={() => {
+        setIndex((prev) =>
+          prev + 1 < candidates.length ? prev + 1 : prev,
+        );
+      }}
+    />
+  );
+}
 
 function toStringArray(input?: string | string[]): string[] {
   if (Array.isArray(input)) {
@@ -764,16 +890,13 @@ export default function ProductDetailsClient({
                     className="rounded-xl border border-zinc-200 bg-white p-1.5 transition hover:shadow-sm sm:p-2"
                   >
                     <div className="relative mb-1.5 aspect-[3/4] overflow-hidden rounded-lg border border-zinc-100 bg-gradient-to-b from-zinc-50 to-zinc-100/70 sm:mb-2">
-                      <Image
-                        src={
-                          item.image ||
-                          "https://phoneo.site/placeholder-phone.png"
-                        }
+                      <RelatedImage
+                        src={item.image}
                         alt={`${item.company} ${item.model}`}
-                        fill
                         sizes="(max-width: 640px) 44vw, (max-width: 1024px) 30vw, 18vw"
                         className="object-contain p-1.5 sm:p-2"
-                        unoptimized
+                        brand={item.company}
+                        model={item.model}
                       />
                     </div>
                     <p className="line-clamp-1 text-[11px] font-semibold text-zinc-900 sm:text-xs">

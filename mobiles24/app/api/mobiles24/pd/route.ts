@@ -17,6 +17,13 @@ export async function GET(request: NextRequest) {
 
   try {
     const res = await fetch(upstream, { cache: "no-store" });
+    if (res.status === 404) {
+      return NextResponse.json(
+        { status: false, message: "not found" },
+        { status: 200 },
+      );
+    }
+
     if (!res.ok) {
       return NextResponse.json(
         { status: false, message: "upstream failed" },

@@ -1,6 +1,7 @@
 //components/WishlistClient.tsx
 "use client";
 
+import Link from "next/link";
 import PhoneCard from "@/components/PhoneCard";
 import { useWishlist } from "@/components/WishlistProvider";
 
@@ -18,7 +19,16 @@ export default function WishlistClient() {
   return (
     <section className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
       {items.map((phone) => (
-        <PhoneCard key={phone.id} phone={phone} />
+        <Link
+          key={phone.id}
+          href={`/mobiles24/${encodeURIComponent(
+            phone.company?.trim() || "unknown",
+          )}/${encodeURIComponent(
+            phone.model?.trim() || "unknown",
+          )}/${phone.id}`}
+        >
+          <PhoneCard phone={phone} />
+        </Link>
       ))}
     </section>
   );

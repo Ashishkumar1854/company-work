@@ -12,6 +12,7 @@ type SearchBarProps = {
   filterOptions?: FilterOption[];
   selectedFilter?: string;
   onSelectFilter?: (key: string) => void;
+  placeholder?: string;
 };
 
 export default function SearchBar({
@@ -20,6 +21,7 @@ export default function SearchBar({
   filterOptions = [],
   selectedFilter = "all",
   onSelectFilter,
+  placeholder = "Search anything...",
 }: SearchBarProps) {
   const [isOpen, setIsOpen] = useState(false);
   const wrapRef = useRef<HTMLDivElement | null>(null);
@@ -43,7 +45,7 @@ export default function SearchBar({
         <input
           value={value}
           onChange={(event) => onChange(event.target.value)}
-          placeholder="Search anything..."
+          placeholder={placeholder}
           className="w-full bg-transparent text-sm outline-none"
         />
         <button
