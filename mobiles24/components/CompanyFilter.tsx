@@ -98,11 +98,13 @@ export default function CompanyFilter({
     return (
       <button
         key={company}
-        className={`flex items-center whitespace-nowrap rounded-full border shadow-sm transition ${
-          compact ? "gap-1.5 px-2.5 py-1.5 text-xs font-medium" : "gap-2 px-4 py-2 font-semibold"
+        className={`flex items-center whitespace-nowrap rounded-full border transition duration-200 ease-out ${
+          compact
+            ? "gap-1.5 px-2.5 py-1.5 text-xs font-medium"
+            : "gap-2 px-4 py-2 font-semibold"
         } ${
           isActive ? "text-white" : "bg-white text-zinc-900"
-        }`}
+        } shadow-[0_6px_0_0_rgba(0,0,0,0.12)] hover:-translate-y-0.5 hover:shadow-[0_8px_0_0_rgba(0,0,0,0.14)] active:translate-y-0.5 active:shadow-[0_2px_0_0_rgba(0,0,0,0.18)]`}
         style={{
           borderColor: isActive ? color : "rgba(0,0,0,0.08)",
           backgroundColor: isActive ? color : "#ffffff",

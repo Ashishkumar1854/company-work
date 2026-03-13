@@ -234,11 +234,15 @@ export default function ListingPageClient({ type }: Props) {
     <div className="min-h-screen bg-[#f7f4ef]">
       <Navbar
         storeName={store.name}
-        variant={type === "accessories" ? "accessories" : "default"}
+        variant={
+          type === "accessories" || type === "new" || type === "used"
+            ? "accessories"
+            : "default"
+        }
       />
 
       <main className="mx-auto max-w-6xl space-y-6 px-4 pt-6 pb-0">
-        {type !== "accessories" && (
+        {type === "used" && (
           <>
             <Hero
               title={store.name}

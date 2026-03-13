@@ -74,24 +74,56 @@ const getOffer = (item: PhoneItem) => {
 
 export default function AccessoryCard({ item }: AccessoryCardProps) {
   const imageCandidates = useMemo(() => {
+    const brandFallback = getBrandFallbackImage(item.company);
+    const units = Array.isArray(item.raw?.units) ? item.raw.units : [];
+    const inStockUnit =
+      units.find((u: any) => {
+        const status = String(u?.Status || "")
+          .toLowerCase()
+          .replace(/\s+/g, "");
+        return status === "instock";
+      }) || units[0];
+
     const rawList = [
-      item.image,
-      item.raw?.image?.[0]?.path,
       item.raw?.Thumb,
       item.raw?.DummyThumb,
+      item.raw?.image?.[0]?.path,
+      item.raw?.Images?.[0]?.path,
+      item.raw?.Images?.[0],
+      inStockUnit?.Thumb,
+      inStockUnit?.image?.[0]?.path,
+      inStockUnit?.Images?.[0]?.path,
+      inStockUnit?.Images?.[0],
+      item.image,
     ];
 
     const candidates: string[] = [];
     const pushCandidate = (rawUrl: string) => {
       const normalized = normalizeImageUrl(rawUrl);
+      if (
+        normalized.startsWith("https://phoneo.site") ||
+        normalized.startsWith("https://super.phoneo.in")
+      ) {
+        // Try direct load first (proxy often 404s for these hosts).
+        candidates.push(normalized);
+        candidates.push(wrapImageProxy(normalized));
+        return;
+      }
       candidates.push(wrapImageProxy(normalized));
     };
 
     for (const raw of rawList) {
       const value = String(raw || "").trim();
       if (!value) continue;
+      if (
+        value === brandFallback ||
+        value === "/placeholder-phone.svg" ||
+        value.startsWith("/placeholder-")
+      ) {
+        continue;
+      }
 
-      if (value.startsWith("/api/") || value.startsWith("/placeholder-")) {
+      if (value.startsWith("/api/")) {
         candidates.push(value);
         continue;
       }
@@ -125,7 +157,7 @@ export default function AccessoryCard({ item }: AccessoryCardProps) {
       pushCandidate(value);
     }
 
-    candidates.push(getBrandFallbackImage(item.company));
+    candidates.push(brandFallback);
     candidates.push("/placeholder-phone.svg");
     return Array.from(new Set(candidates));
   }, [item.company, item.image, item.raw]);
