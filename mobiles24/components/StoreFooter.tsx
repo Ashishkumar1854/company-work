@@ -36,7 +36,7 @@ export default function StoreFooter({
     : "https://maps.google.com";
 
   return (
-    <footer className="mt-0 w-full overflow-hidden rounded-xl border border-white/5 bg-gradient-to-b from-zinc-950 to-black text-white shadow-xl">
+    <footer className="mt-0 w-full overflow-hidden border border-white/5 bg-gradient-to-b from-zinc-950 to-black text-white shadow-xl">
       <div className="px-2.5 py-2 sm:px-3 sm:py-2.5">
         <h3 className="text-center text-base font-semibold tracking-wide">{storeName}</h3>
 

@@ -38,6 +38,10 @@ export default function Hero({
   const hasAnySocial = Boolean(
     social?.whatsapp || social?.google || social?.facebook || social?.youtube,
   );
+  const hasAddress = Boolean(description?.trim());
+  const mapsLink = hasAddress
+    ? `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(description)}`
+    : "https://maps.google.com";
 
   return (
     <section
@@ -136,7 +140,7 @@ export default function Hero({
             </a>
           )}
           {social?.google && (
-            <a href={social.google} target="_blank">
+            <a href={mapsLink} target="_blank" rel="noreferrer">
               <div className="flex h-10 w-10 items-center justify-center rounded-full bg-white shadow-md sm:h-12 sm:w-12">
                 <MapPin className="h-5 w-5 text-red-500 sm:h-6 sm:w-6" />
               </div>

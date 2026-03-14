@@ -180,28 +180,30 @@ export default function AccessoryCard({ item }: AccessoryCardProps) {
   return (
     <div className="rounded-2xl border border-black/10 bg-white p-4 shadow-sm transition hover:shadow-md">
       <div className="flex gap-4">
-        <div className="relative h-[108px] w-[108px] flex-shrink-0 overflow-hidden rounded-xl bg-white">
-          <Image
-            src={imgSrc}
-            alt={`${item.company} ${item.model}`}
-            fill
-            sizes="108px"
-            className="object-contain p-1"
-            unoptimized
-            onError={() => {
-              const placeholderIndex = imageCandidates.indexOf(
-                "/placeholder-phone.svg",
-              );
-              setImgIndex((prev) => {
-                const next = prev + 1;
-                if (next < imageCandidates.length) return next;
-                if (placeholderIndex >= 0 && prev !== placeholderIndex) {
-                  return placeholderIndex;
-                }
-                return prev;
-              });
-            }}
-          />
+        <div className="relative h-[108px] w-[108px] flex-shrink-0 overflow-hidden rounded-xl border border-black/5 bg-gradient-to-b from-zinc-50 to-zinc-100 p-1.5">
+          <div className="relative h-full w-full overflow-hidden rounded-lg bg-gradient-to-b from-zinc-50 to-zinc-100">
+            <Image
+              src={imgSrc}
+              alt={`${item.company} ${item.model}`}
+              fill
+              sizes="108px"
+              className="scale-[1.03] object-contain p-0.5"
+              unoptimized
+              onError={() => {
+                const placeholderIndex = imageCandidates.indexOf(
+                  "/placeholder-phone.svg",
+                );
+                setImgIndex((prev) => {
+                  const next = prev + 1;
+                  if (next < imageCandidates.length) return next;
+                  if (placeholderIndex >= 0 && prev !== placeholderIndex) {
+                    return placeholderIndex;
+                  }
+                  return prev;
+                });
+              }}
+            />
+          </div>
         </div>
 
         <div className="min-w-0 flex-1">

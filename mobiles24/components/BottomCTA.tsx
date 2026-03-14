@@ -19,7 +19,7 @@ export default function BottomCTA({
       <div className="mx-auto flex max-w-6xl gap-3">
         <a
           href={`tel:${phoneNumber}`}
-          className="flex-1 rounded-full bg-black px-4 py-3 text-center text-xs font-semibold text-white"
+          className="flex-1 rounded-full border border-black/10 bg-white px-4 py-3 text-center text-xs font-semibold text-zinc-800 shadow-sm"
         >
           Call
         </a>
@@ -27,7 +27,7 @@ export default function BottomCTA({
           href={whatsappUrl}
           target="_blank"
           rel="noreferrer"
-          className="flex-1 rounded-full bg-[#16a34a] px-4 py-3 text-center text-xs font-semibold text-white"
+          className="flex-1 rounded-full bg-[#16a34a] px-4 py-3 text-center text-xs font-semibold text-white shadow-[0_10px_24px_rgba(22,163,74,0.35)]"
         >
           WhatsApp
         </a>

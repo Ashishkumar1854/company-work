@@ -173,15 +173,15 @@ export default function PhoneCard({ phone }: PhoneCardProps) {
     >
       <div className="flex gap-4">
         {/* ================= IMAGE SECTION ================= */}
-        <div className="relative h-24 w-20 flex-shrink-0 overflow-hidden rounded-2xl bg-zinc-100 p-1">
+        <div className="relative h-24 w-20 flex-shrink-0 overflow-hidden rounded-2xl border border-black/5 bg-gradient-to-b from-zinc-50 to-zinc-100 p-1.5">
           {imgSrc ? (
-            <div className="relative h-full w-full">
+            <div className="relative h-full w-full overflow-hidden rounded-xl bg-gradient-to-b from-zinc-50 to-zinc-100">
               <Image
                 src={imgSrc}
                 alt={`${phone.company} ${phone.model}`}
                 fill
                 sizes="72px"
-                className="object-contain"
+                className="scale-[1.03] object-contain p-0.5"
                 unoptimized
                 onError={() => {
                   if (pdFallbackImage && imgSrc === pdFallbackImage) {

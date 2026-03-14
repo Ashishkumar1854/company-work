@@ -399,16 +399,18 @@ export default function HomeClient({
 
             <div className="space-y-4 p-4">
               <div className="flex gap-3 rounded-xl border border-black/10 bg-zinc-50 p-3">
-                <div className="relative h-24 w-24 flex-shrink-0 overflow-hidden rounded-xl border border-black/10 bg-white">
-                  <Image
-                    src={wrapImageProxy(modalImageSrc)}
-                    alt={`${selectedAccessory.company} ${selectedAccessory.model}`}
-                    fill
-                    sizes="96px"
-                    className="object-contain p-1"
-                    unoptimized
-                    onError={() => setModalImageSrc("/placeholder-phone.svg")}
-                  />
+                <div className="relative h-24 w-24 flex-shrink-0 overflow-hidden rounded-xl border border-black/10 bg-gradient-to-b from-zinc-50 to-zinc-100 p-1">
+                  <div className="relative h-full w-full overflow-hidden rounded-lg bg-gradient-to-b from-zinc-50 to-zinc-100">
+                    <Image
+                      src={wrapImageProxy(modalImageSrc)}
+                      alt={`${selectedAccessory.company} ${selectedAccessory.model}`}
+                      fill
+                      sizes="96px"
+                      className="scale-[1.03] object-contain p-0.5"
+                      unoptimized
+                      onError={() => setModalImageSrc("/placeholder-phone.svg")}
+                    />
+                  </div>
                 </div>
 
                 <div className="min-w-0 space-y-1">

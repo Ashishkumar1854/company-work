@@ -1,7 +1,14 @@
 "use client";
 
 import Link from "next/link";
-import { useEffect, useMemo, useRef, useState } from "react";
+import {
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+  type TouchEvent,
+  type WheelEvent,
+} from "react";
 import Image from "next/image";
 import {
   BatteryCharging,
@@ -325,6 +332,8 @@ export default function ProductDetailsClient({
   const [copiedShare, setCopiedShare] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
+  const touchStartXRef = useRef<number | null>(null);
+  const wheelLockRef = useRef(false);
 
   useEffect(() => {
     let active = true;
@@ -565,6 +574,59 @@ export default function ProductDetailsClient({
     }
   };
 
+  const selectedImageIndex = gallery.findIndex((item) => item === selectedImage);
+
+  const goToImage = (direction: "prev" | "next") => {
+    if (gallery.length <= 1) return;
+
+    const currentIndex = selectedImageIndex >= 0 ? selectedImageIndex : 0;
+    const nextIndex =
+      direction === "next"
+        ? (currentIndex + 1) % gallery.length
+        : (currentIndex - 1 + gallery.length) % gallery.length;
+
+    setSelectedImage(gallery[nextIndex]);
+  };
+
+  const handleGalleryTouchStart = (event: TouchEvent<HTMLDivElement>) => {
+    touchStartXRef.current = event.touches[0]?.clientX ?? null;
+  };
+
+  const handleGalleryTouchEnd = (event: TouchEvent<HTMLDivElement>) => {
+    const startX = touchStartXRef.current;
+    const endX = event.changedTouches[0]?.clientX ?? null;
+    touchStartXRef.current = null;
+
+    if (startX === null || endX === null) return;
+
+    const deltaX = endX - startX;
+    if (Math.abs(deltaX) < 40) return;
+
+    goToImage(deltaX < 0 ? "next" : "prev");
+  };
+
+  const handleGalleryWheel = (event: WheelEvent<HTMLDivElement>) => {
+    if (gallery.length <= 1) return;
+
+    const dominantDelta =
+      Math.abs(event.deltaY) >= Math.abs(event.deltaX)
+        ? event.deltaY
+        : event.deltaX;
+
+    if (Math.abs(dominantDelta) < 10) return;
+
+    event.preventDefault();
+
+    if (wheelLockRef.current) return;
+    wheelLockRef.current = true;
+
+    goToImage(dominantDelta > 0 ? "next" : "prev");
+
+    window.setTimeout(() => {
+      wheelLockRef.current = false;
+    }, 220);
+  };
+
   const highlights = [
     { label: "Release", value: pdData?.release_date || "", icon: CalendarDays },
     { label: "Storage", value: displayStorage, icon: HardDrive },
@@ -609,8 +671,6 @@ export default function ProductDetailsClient({
   const specGroups = Array.isArray(pdData?.specifications)
     ? pdData.specifications
     : [];
-  const visibleSpecGroups = showAllSpecs ? specGroups : specGroups.slice(0, 4);
-
   const ramOptions = Array.isArray(pdData?.ram) ? pdData.ram : [];
   const colors = pdData?.color ? Object.keys(pdData.color) : [];
 
@@ -627,7 +687,7 @@ export default function ProductDetailsClient({
                   key={`${img}-${idx}`}
                   type="button"
                   onClick={() => setSelectedImage(img)}
-                  className={`relative h-12 min-w-[44px] overflow-hidden rounded-md border bg-zinc-100 lg:h-12 lg:min-w-0 ${
+                  className={`relative h-12 min-w-[44px] overflow-hidden rounded-md border bg-gradient-to-b from-zinc-50 to-zinc-100 lg:h-12 lg:min-w-0 ${
                     selectedImage === img
                       ? "border-[#16a34a]"
                       : "border-black/10"
@@ -638,7 +698,7 @@ export default function ProductDetailsClient({
                     alt={phoneTitle}
                     fill
                     sizes="80px"
-                    className="object-cover"
+                    className="object-contain p-0.5"
                     unoptimized
                   />
                 </button>
@@ -646,16 +706,26 @@ export default function ProductDetailsClient({
             </div>
 
             <div className="order-1 lg:order-2">
-              <div className="relative mx-auto aspect-[4/5] w-[82%] max-w-[300px] overflow-hidden rounded-lg border border-black/5 bg-zinc-100 sm:max-w-[340px] lg:w-full lg:max-w-[380px]">
+              <div
+                className="relative mx-auto aspect-[4/5] w-[82%] max-w-[300px] overflow-hidden rounded-xl border border-black/10 bg-gradient-to-b from-zinc-50 to-zinc-100 shadow-[inset_0_0_0_1px_rgba(255,255,255,0.45)] sm:max-w-[340px] lg:w-full lg:max-w-[380px]"
+                onTouchStart={handleGalleryTouchStart}
+                onTouchEnd={handleGalleryTouchEnd}
+                onWheel={handleGalleryWheel}
+              >
                 {selectedImage ? (
-                  <Image
-                    src={selectedImage}
-                    alt={phoneTitle}
-                    fill
-                    sizes="(max-width: 640px) 82vw, (max-width: 1024px) 48vw, 32vw"
-                    className="object-contain"
-                    unoptimized
-                  />
+                  <div className="absolute inset-[8px] overflow-hidden rounded-lg bg-gradient-to-b from-zinc-50 to-zinc-100 sm:inset-[10px]">
+                    <Image
+                      src={selectedImage}
+                      alt={phoneTitle}
+                      fill
+                      sizes="(max-width: 640px) 82vw, (max-width: 1024px) 48vw, 32vw"
+                      className="scale-[1.07] object-contain p-0 [image-rendering:auto]"
+                      unoptimized
+                    />
+                    <div className="pointer-events-none absolute inset-x-0 bottom-0 h-3 bg-gradient-to-t from-zinc-100 via-zinc-100/80 to-transparent" />
+                    <div className="pointer-events-none absolute inset-y-0 left-0 w-3 bg-gradient-to-r from-zinc-50 via-zinc-50/80 to-transparent" />
+                    <div className="pointer-events-none absolute inset-y-0 right-0 w-3 bg-gradient-to-l from-zinc-100 via-zinc-100/80 to-transparent" />
+                  </div>
                 ) : (
                   <div className="flex h-full items-center justify-center text-sm text-zinc-500">
                     No image
@@ -821,50 +891,49 @@ export default function ProductDetailsClient({
 
         {specGroups.length > 0 && (
           <section className="space-y-3">
-            {visibleSpecGroups.map((group, groupIndex) => {
-              const rows = Array.isArray(group.specs) ? group.specs : [];
-              if (rows.length === 0) return null;
-              const groupKey = `${group.title || "group"}-${groupIndex}`;
+            <button
+              type="button"
+              onClick={() => setShowAllSpecs((prev) => !prev)}
+              className="w-full rounded-xl border border-black/10 bg-white px-4 py-3 text-sm font-semibold text-zinc-800 shadow-sm"
+            >
+              {showAllSpecs
+                ? "Show Less Details"
+                : `More Details (${specGroups.length} sections)`}
+            </button>
 
-              return (
-                <div
-                  key={groupKey}
-                  className="overflow-hidden rounded-xl border border-zinc-200 bg-white shadow-[0_2px_10px_rgba(0,0,0,0.03)]"
-                >
-                  <div className="bg-zinc-50 px-3 py-2 text-sm font-semibold text-zinc-900 sm:text-base">
-                    {group.title || "Details"}
+            {showAllSpecs &&
+              specGroups.map((group, groupIndex) => {
+                const rows = Array.isArray(group.specs) ? group.specs : [];
+                if (rows.length === 0) return null;
+                const groupKey = `${group.title || "group"}-${groupIndex}`;
+
+                return (
+                  <div
+                    key={groupKey}
+                    className="overflow-hidden rounded-xl border border-zinc-200 bg-white shadow-[0_2px_10px_rgba(0,0,0,0.03)]"
+                  >
+                    <div className="bg-zinc-50 px-3 py-2 text-sm font-semibold text-zinc-900 sm:text-base">
+                      {group.title || "Details"}
+                    </div>
+
+                    <div>
+                      {rows.map((row, rowIndex) => (
+                        <div
+                          key={`${groupKey}-${row.key || "row"}-${rowIndex}`}
+                          className="grid gap-1 border-t border-black/5 px-3 py-2 sm:grid-cols-[124px_1fr]"
+                        >
+                          <p className="text-xs font-medium text-zinc-500 sm:text-sm">
+                            {row.key || "Info"}
+                          </p>
+                          <p className="whitespace-pre-line text-sm text-zinc-900">
+                            {compactSpecValue(row.key, joinVals(row.val) || "-")}
+                          </p>
+                        </div>
+                      ))}
+                    </div>
                   </div>
-
-                  <div>
-                    {rows.map((row, rowIndex) => (
-                      <div
-                        key={`${groupKey}-${row.key || "row"}-${rowIndex}`}
-                        className="grid gap-1 border-t border-black/5 px-3 py-2 sm:grid-cols-[124px_1fr]"
-                      >
-                        <p className="text-xs font-medium text-zinc-500 sm:text-sm">
-                          {row.key || "Info"}
-                        </p>
-                        <p className="whitespace-pre-line text-sm text-zinc-900">
-                          {compactSpecValue(row.key, joinVals(row.val) || "-")}
-                        </p>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-              );
-            })}
-
-            {specGroups.length > 4 && (
-              <button
-                type="button"
-                onClick={() => setShowAllSpecs((prev) => !prev)}
-                className="w-full rounded-xl border border-black/10 bg-white px-4 py-2.5 text-sm font-semibold text-zinc-800 shadow-sm"
-              >
-                {showAllSpecs
-                  ? "Show Less Details"
-                  : `More Details (${specGroups.length - 4} sections)`}
-              </button>
-            )}
+                );
+              })}
           </section>
         )}
 
@@ -889,15 +958,17 @@ export default function ProductDetailsClient({
                     href={`/mobiles24/${encodeURIComponent(item.company || "unknown")}/${encodeURIComponent(item.model || "unknown")}/${item.id}`}
                     className="rounded-xl border border-zinc-200 bg-white p-1.5 transition hover:shadow-sm sm:p-2"
                   >
-                    <div className="relative mb-1.5 aspect-[3/4] overflow-hidden rounded-lg border border-zinc-100 bg-gradient-to-b from-zinc-50 to-zinc-100/70 sm:mb-2">
+                    <div className="relative mb-1.5 aspect-[3/4] overflow-hidden rounded-lg border border-zinc-100 bg-gradient-to-b from-zinc-50 to-zinc-100/70 p-1.5 sm:mb-2">
+                      <div className="relative h-full w-full overflow-hidden rounded-md bg-gradient-to-b from-zinc-50 to-zinc-100/70">
                       <RelatedImage
                         src={item.image}
                         alt={`${item.company} ${item.model}`}
                         sizes="(max-width: 640px) 44vw, (max-width: 1024px) 30vw, 18vw"
-                        className="object-contain p-1.5 sm:p-2"
+                        className="translate-y-[1%] scale-[1.08] object-contain p-0.5 sm:p-1"
                         brand={item.company}
                         model={item.model}
                       />
+                      </div>
                     </div>
                     <p className="line-clamp-1 text-[11px] font-semibold text-zinc-900 sm:text-xs">
                       {item.company} {item.model}

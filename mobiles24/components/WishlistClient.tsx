@@ -1,12 +1,22 @@
 //components/WishlistClient.tsx
 "use client";
 
+import { useEffect } from "react";
 import Link from "next/link";
+import { usePathname, useRouter } from "next/navigation";
 import PhoneCard from "@/components/PhoneCard";
 import { useWishlist } from "@/components/WishlistProvider";
 
 export default function WishlistClient() {
   const { items } = useWishlist();
+  const router = useRouter();
+  const pathname = usePathname();
+
+  useEffect(() => {
+    if (pathname === "/wishlist" && items.length === 0) {
+      router.replace("/mobiles24");
+    }
+  }, [items.length, pathname, router]);
 
   if (items.length === 0) {
     return (

@@ -23,6 +23,15 @@ body {
   font-family: var(--font-body), system-ui, sans-serif;
 }
 
+.hide-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.hide-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
 h1,
 h2,
 h3,

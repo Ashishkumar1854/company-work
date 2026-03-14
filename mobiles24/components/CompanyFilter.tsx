@@ -132,7 +132,7 @@ export default function CompanyFilter({
       {/* Mobile: compact -> expand */}
       <div className="pb-2 text-sm sm:hidden">
         {showAllMobile ? (
-          <div className="flex gap-3 overflow-x-auto">
+          <div className="hide-scrollbar -mx-1 flex gap-3 overflow-x-auto px-1 py-1">
             {companies.map((company) => renderChip(company))}
           </div>
         ) : (
@@ -157,7 +157,7 @@ export default function CompanyFilter({
       </div>
 
       {/* Desktop: full list */}
-      <div className="hidden gap-3 overflow-x-auto pb-2 text-sm sm:flex">
+      <div className="hide-scrollbar hidden gap-3 overflow-x-auto px-1 pb-2 pt-1 text-sm sm:flex">
         {companies.map((company) => renderChip(company))}
       </div>
     </>

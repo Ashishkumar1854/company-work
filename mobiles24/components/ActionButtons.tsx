@@ -17,9 +17,9 @@ export default function ActionButtons({
   active,
 }: ActionButtonsProps) {
   const baseStyle =
-    "flex items-center justify-center gap-3 rounded-2xl border px-4 py-1.5 text-center text-sm font-semibold transition duration-200 ease-out hover:-translate-y-0.5";
+    "flex items-center justify-center gap-2 rounded-2xl border px-3 py-2 text-center text-xs font-semibold transition duration-200 ease-out hover:-translate-y-0.5 sm:gap-3 sm:px-4 sm:py-1.5 sm:text-sm";
   const iconBase =
-    "flex h-9 w-9 items-center justify-center rounded-xl text-base transition";
+    "flex h-8 w-8 items-center justify-center rounded-xl text-sm transition sm:h-9 sm:w-9 sm:text-base";
   const activeIcon = "bg-white text-black shadow-sm";
   const inactiveIcon = "bg-black/5 text-black";
 
@@ -27,7 +27,7 @@ export default function ActionButtons({
     "shadow-[0_6px_0_0_rgba(0,0,0,0.12)] hover:shadow-[0_8px_0_0_rgba(0,0,0,0.16)] active:translate-y-0.5 active:shadow-[0_3px_0_0_rgba(0,0,0,0.18)]";
 
   return (
-    <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
+    <div className="grid grid-cols-1 gap-3 pb-1 sm:grid-cols-3 sm:pb-0">
       {/* USED */}
       <Link
         href="/mobiles24"
@@ -44,7 +44,7 @@ export default function ActionButtons({
         >
           🔁
         </span>
-        <span className="flex flex-col items-start">
+        <span className="flex min-w-0 flex-col items-start">
           <span className="text-sm font-semibold">Used Phones</span>
           <span
             className={`text-xs font-medium ${
@@ -72,7 +72,7 @@ export default function ActionButtons({
         >
           📱
         </span>
-        <span className="flex flex-col items-start">
+        <span className="flex min-w-0 flex-col items-start">
           <span className="text-sm font-semibold">New Phones</span>
           <span
             className={`text-xs font-medium ${
@@ -100,7 +100,7 @@ export default function ActionButtons({
         >
           🎧
         </span>
-        <span className="flex flex-col items-start">
+        <span className="flex min-w-0 flex-col items-start">
           <span className="text-sm font-semibold">Accessories</span>
           <span
             className={`text-xs font-medium ${

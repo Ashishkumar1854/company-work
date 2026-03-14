@@ -224,7 +224,22 @@ export default function ListingPageClient({ type }: Props) {
 
   // ================= SAFE RENDER =================
 
-  if (loading) return null;
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-[#f7f4ef]">
+        <Navbar storeName="Mobiles24" variant="accessories" />
+        <div className="mx-auto flex min-h-[70vh] max-w-6xl flex-col items-center justify-center px-4 text-center sm:px-6">
+          <div className="h-12 w-12 animate-spin rounded-full border-4 border-black/10 border-t-black" />
+          <p className="mt-6 text-2xl font-semibold text-zinc-900">
+            Searching products...
+          </p>
+          <p className="mt-2 text-sm text-zinc-500">
+            Loading the latest phones and accessories for this store.
+          </p>
+        </div>
+      </div>
+    );
+  }
 
   if (!store) {
     return <div className="p-10 text-center">Store not found.</div>;
@@ -242,23 +257,20 @@ export default function ListingPageClient({ type }: Props) {
       />
 
       <main className="mx-auto max-w-6xl space-y-6 px-4 pt-6 pb-0">
-        {type === "used" && (
-          <>
-            <Hero
-              title={store.name}
-              slogan={store.slogan}
-              description={store.description}
-              imageUrl={store.bannerUrl}
-              categories={visibleCategories}
-              financeEnabled={store.financeEnabled}
-              social={store.social}
-              onCategorySelect={(id) => setSelectedCategoryId(id)}
-            />
+        <Hero
+          title={store.name}
+          slogan={store.slogan}
+          description={store.description}
+          imageUrl={store.bannerUrl}
+          categories={type === "accessories" ? [] : visibleCategories}
+          financeEnabled={store.financeEnabled}
+          social={store.social}
+          onCategorySelect={
+            type === "accessories" ? undefined : (id) => setSelectedCategoryId(id)
+          }
+        />
 
-            {store.financeEnabled && <FinanceBanner phoneNumber="9039933984" />}
-          </>
-        )}
-
+        {store.financeEnabled && <FinanceBanner phoneNumber="9039933984" />}
         <HomeClient
           usedPhones={filteredUsed}
           newPhones={filteredNew}
@@ -266,15 +278,15 @@ export default function ListingPageClient({ type }: Props) {
           accessoriesCount={filteredAccessories.length}
           initialTab={type}
         />
-
-        <div className="mt-2">
-          <StoreFooter
-            storeName={store.name}
-            address={store.description}
-            social={store.social}
-          />
-        </div>
       </main>
+
+      <div className="mt-2 w-full">
+        <StoreFooter
+          storeName={store.name}
+          address={store.description}
+          social={store.social}
+        />
+      </div>
     </div>
   );
 }
