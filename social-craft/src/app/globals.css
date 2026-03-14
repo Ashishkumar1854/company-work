@@ -1,0 +1,75 @@
+/* ============================================
+   FILE: globals.css
+   PURPOSE: Loads base styles, fonts, blueprint background, and global UI polish
+   USES: Tailwind CSS layers and Social Craft design tokens
+   ============================================ */
+
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Playfair+Display:wght@600;700;800&display=swap");
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    color-scheme: light;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    @apply bg-bg font-sans text-gray-body antialiased;
+    background-image:
+      radial-gradient(circle at top, rgba(255, 255, 255, 0.96) 0%, rgba(255, 255, 255, 0.84) 45%, rgba(242, 244, 247, 0.92) 100%),
+      linear-gradient(rgba(29, 78, 216, 0.06) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(29, 78, 216, 0.06) 1px, transparent 1px);
+    background-size: auto, 36px 36px, 36px 36px;
+    background-attachment: fixed;
+    min-height: 100vh;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    @apply font-serif text-ink;
+  }
+
+  h1 {
+    font-size: clamp(2rem, 3vw + 1rem, 3.2rem);
+  }
+
+  h2 {
+    font-size: 2rem;
+  }
+
+  h3 {
+    font-size: 1.35rem;
+  }
+
+  p {
+    font-size: 1rem;
+  }
+
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: #2563eb rgba(11, 18, 32, 0.08);
+  }
+
+  *::-webkit-scrollbar {
+    width: 10px;
+  }
+
+  *::-webkit-scrollbar-track {
+    background: rgba(11, 18, 32, 0.08);
+  }
+
+  *::-webkit-scrollbar-thumb {
+    background: linear-gradient(180deg, #1d4ed8, #2563eb);
+    border-radius: 999px;
+  }
+}
