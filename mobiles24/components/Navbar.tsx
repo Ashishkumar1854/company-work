@@ -23,7 +23,7 @@ export default function Navbar({
           isAccessories ? "py-5 sm:py-6" : "py-3"
         } sm:px-6`}
       >
-        <div className="flex items-center gap-2">
+        <Link href="/mobiles24" className="flex items-center gap-2">
           <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-white/10 text-white sm:h-11 sm:w-11">
             <Smartphone className="h-6 w-6" aria-hidden="true" />
           </span>
@@ -32,7 +32,7 @@ export default function Navbar({
               {storeName}
             </span>
           )}
-        </div>
+        </Link>
         {isAccessories && (
           <div className="pointer-events-none absolute left-1/2 -translate-x-1/2">
             <span className="font-display text-3xl font-light tracking-[0.08em] text-white sm:text-5xl">

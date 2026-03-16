@@ -25,6 +25,17 @@ type Props = {
   type: "used" | "new" | "accessories";
 };
 
+type ListingCache = {
+  store: StoreInfo | null;
+  usedPhones: PhoneItem[];
+  newPhones: PhoneItem[];
+  accessories: PhoneItem[];
+  timestamp: number;
+};
+
+const LISTING_CACHE_TTL_MS = 2 * 60 * 1000;
+let listingCache: ListingCache | null = null;
+
 function pickFirstArray(candidates: any[]): any[] {
   for (const value of candidates) {
     if (Array.isArray(value)) return value;
@@ -57,6 +68,18 @@ export default function ListingPageClient({ type }: Props) {
 
   useEffect(() => {
     let active = true;
+
+    const cached = listingCache;
+    if (cached && Date.now() - cached.timestamp < LISTING_CACHE_TTL_MS) {
+      setStore(cached.store);
+      setUsedPhones(cached.usedPhones);
+      setNewPhones(cached.newPhones);
+      setAccessories(cached.accessories);
+      setLoading(false);
+      return () => {
+        active = false;
+      };
+    }
 
     async function fetchJson(url: string) {
       try {
@@ -172,6 +195,13 @@ export default function ListingPageClient({ type }: Props) {
         setUsedPhones(used);
         setNewPhones(newPhonesData);
         setAccessories(accessoriesData);
+        listingCache = {
+          store: normalizedStore,
+          usedPhones: used,
+          newPhones: newPhonesData,
+          accessories: accessoriesData,
+          timestamp: Date.now(),
+        };
       } catch (e) {
         console.error("❌ Listing load error:", e);
       } finally {

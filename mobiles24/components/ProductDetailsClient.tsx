@@ -719,12 +719,13 @@ export default function ProductDetailsClient({
                       alt={phoneTitle}
                       fill
                       sizes="(max-width: 640px) 82vw, (max-width: 1024px) 48vw, 32vw"
-                      className="scale-[1.07] object-contain p-0 [image-rendering:auto]"
+                      className="object-contain p-1 [image-rendering:auto]"
                       unoptimized
                     />
-                    <div className="pointer-events-none absolute inset-x-0 bottom-0 h-3 bg-gradient-to-t from-zinc-100 via-zinc-100/80 to-transparent" />
-                    <div className="pointer-events-none absolute inset-y-0 left-0 w-3 bg-gradient-to-r from-zinc-50 via-zinc-50/80 to-transparent" />
-                    <div className="pointer-events-none absolute inset-y-0 right-0 w-3 bg-gradient-to-l from-zinc-100 via-zinc-100/80 to-transparent" />
+                    <div className="pointer-events-none absolute inset-x-0 top-0 h-3 bg-gradient-to-b from-zinc-100/80 to-transparent" />
+                    <div className="pointer-events-none absolute inset-x-0 bottom-0 h-3 bg-gradient-to-t from-zinc-100/80 to-transparent" />
+                    <div className="pointer-events-none absolute inset-y-0 left-0 w-3 bg-gradient-to-r from-zinc-100/80 to-transparent" />
+                    <div className="pointer-events-none absolute inset-y-0 right-0 w-3 bg-gradient-to-l from-zinc-100/80 to-transparent" />
                   </div>
                 ) : (
                   <div className="flex h-full items-center justify-center text-sm text-zinc-500">
@@ -964,10 +965,14 @@ export default function ProductDetailsClient({
                         src={item.image}
                         alt={`${item.company} ${item.model}`}
                         sizes="(max-width: 640px) 44vw, (max-width: 1024px) 30vw, 18vw"
-                        className="translate-y-[1%] scale-[1.08] object-contain p-0.5 sm:p-1"
+                        className="object-contain p-1 sm:p-1.5"
                         brand={item.company}
                         model={item.model}
                       />
+                      <div className="pointer-events-none absolute inset-x-0 top-0 h-2 bg-gradient-to-b from-zinc-100/80 to-transparent" />
+                      <div className="pointer-events-none absolute inset-x-0 bottom-0 h-2 bg-gradient-to-t from-zinc-100/80 to-transparent" />
+                      <div className="pointer-events-none absolute inset-y-0 left-0 w-2 bg-gradient-to-r from-zinc-100/80 to-transparent" />
+                      <div className="pointer-events-none absolute inset-y-0 right-0 w-2 bg-gradient-to-l from-zinc-100/80 to-transparent" />
                       </div>
                     </div>
                     <p className="line-clamp-1 text-[11px] font-semibold text-zinc-900 sm:text-xs">

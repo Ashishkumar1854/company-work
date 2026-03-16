@@ -181,7 +181,7 @@ export default function PhoneCard({ phone }: PhoneCardProps) {
                 alt={`${phone.company} ${phone.model}`}
                 fill
                 sizes="72px"
-                className="scale-[1.03] object-contain p-0.5"
+                className="object-contain p-1"
                 unoptimized
                 onError={() => {
                   if (pdFallbackImage && imgSrc === pdFallbackImage) {
@@ -204,6 +204,10 @@ export default function PhoneCard({ phone }: PhoneCardProps) {
                   });
                 }}
               />
+              <div className="pointer-events-none absolute inset-x-0 top-0 h-2 bg-gradient-to-b from-zinc-100/80 to-transparent" />
+              <div className="pointer-events-none absolute inset-x-0 bottom-0 h-2 bg-gradient-to-t from-zinc-100/80 to-transparent" />
+              <div className="pointer-events-none absolute inset-y-0 left-0 w-2 bg-gradient-to-r from-zinc-100/80 to-transparent" />
+              <div className="pointer-events-none absolute inset-y-0 right-0 w-2 bg-gradient-to-l from-zinc-100/80 to-transparent" />
             </div>
           ) : (
             <div className="flex h-full w-full items-center justify-center text-[10px] text-zinc-500">

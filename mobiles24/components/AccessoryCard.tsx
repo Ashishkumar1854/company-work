@@ -187,7 +187,7 @@ export default function AccessoryCard({ item }: AccessoryCardProps) {
               alt={`${item.company} ${item.model}`}
               fill
               sizes="108px"
-              className="scale-[1.03] object-contain p-0.5"
+              className="object-contain p-1"
               unoptimized
               onError={() => {
                 const placeholderIndex = imageCandidates.indexOf(
@@ -199,10 +199,14 @@ export default function AccessoryCard({ item }: AccessoryCardProps) {
                   if (placeholderIndex >= 0 && prev !== placeholderIndex) {
                     return placeholderIndex;
                   }
-                  return prev;
-                });
-              }}
-            />
+                return prev;
+              });
+            }}
+          />
+          <div className="pointer-events-none absolute inset-x-0 top-0 h-2 bg-gradient-to-b from-zinc-100/80 to-transparent" />
+          <div className="pointer-events-none absolute inset-x-0 bottom-0 h-2 bg-gradient-to-t from-zinc-100/80 to-transparent" />
+          <div className="pointer-events-none absolute inset-y-0 left-0 w-2 bg-gradient-to-r from-zinc-100/80 to-transparent" />
+          <div className="pointer-events-none absolute inset-y-0 right-0 w-2 bg-gradient-to-l from-zinc-100/80 to-transparent" />
           </div>
         </div>
 
