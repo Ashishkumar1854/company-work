@@ -18,7 +18,7 @@ export const navLinks = [
   { label: "Home", href: "/" },
   { label: "Services", href: "/services" },
   { label: "Portfolio", href: "/portfolio" },
-  { label: "Contact", href: "#booking" },
+  { label: "Contact", href: "/#booking" },
 ];
 
 export const servicesData = [
@@ -162,6 +162,30 @@ export const testimonialsData = [
   },
   {
     id: 3,
+    clientName: "Amit K.",
+    serviceType: "Web + Ads",
+    reviewText:
+      "Our landing page started converting better. Clean, fast, and focused.",
+    rating: 5,
+  },
+  {
+    id: 4,
+    clientName: "Rahul S.",
+    serviceType: "Social Media",
+    reviewText:
+      "Design came on time, edits were crisp, our page finally looks premium.",
+    rating: 5,
+  },
+  {
+    id: 5,
+    clientName: "Priya M.",
+    serviceType: "Retainer",
+    reviewText:
+      "They built a complete system for us. Weekly rhythm is solid and consistent.",
+    rating: 5,
+  },
+  {
+    id: 6,
     clientName: "Amit K.",
     serviceType: "Web + Ads",
     reviewText:

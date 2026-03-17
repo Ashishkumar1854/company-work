@@ -20,13 +20,7 @@
   }
 
   body {
-    @apply bg-bg font-sans text-gray-body antialiased;
-    background-image:
-      radial-gradient(circle at top, rgba(255, 255, 255, 0.96) 0%, rgba(255, 255, 255, 0.84) 45%, rgba(242, 244, 247, 0.92) 100%),
-      linear-gradient(rgba(29, 78, 216, 0.06) 1px, transparent 1px),
-      linear-gradient(90deg, rgba(29, 78, 216, 0.06) 1px, transparent 1px);
-    background-size: auto, 36px 36px, 36px 36px;
-    background-attachment: fixed;
+    @apply bg-white font-sans text-gray-body antialiased;
     min-height: 100vh;
   }
 

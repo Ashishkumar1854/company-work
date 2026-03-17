@@ -75,7 +75,7 @@ Looking forward to hearing from you.`;
           <Button variant="ghost" onClick={handleProposalClick} icon={<FaWhatsapp />}>
             Get Proposal
           </Button>
-          <Button href="#booking">Book Now</Button>
+          <Button href="/#booking">Book Now</Button>
         </div>
 
         {/* ── Section: Mobile Menu Toggle ── */}
@@ -111,7 +111,7 @@ Looking forward to hearing from you.`;
             <Button variant="ghost" onClick={handleProposalClick} icon={<FaWhatsapp />}>
               Get Proposal
             </Button>
-            <Button href="#booking" onClick={closeMenu}>
+            <Button href="/#booking" onClick={closeMenu}>
               Book Now
             </Button>
           </div>

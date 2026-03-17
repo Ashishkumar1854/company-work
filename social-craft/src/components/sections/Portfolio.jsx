@@ -37,7 +37,7 @@ export default function Portfolio() {
       : portfolioData.filter((item) => item.category === activeTab);
 
   return (
-    <motion.section {...motionProps} className="py-10 sm:py-12 lg:py-14">
+    <motion.section {...motionProps} className="py-4 sm:py-6">
       {/* ── Section: Portfolio Container ── */}
       <div className="mx-auto max-w-6xl px-4">
         <div className="mb-6 flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">

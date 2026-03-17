@@ -28,7 +28,7 @@ const logoNames = [
 
 export default function LogoShowcase() {
   return (
-    <motion.section {...motionProps} className="py-12 sm:py-14 lg:py-16">
+    <motion.section {...motionProps} className="py-4 sm:py-6">
       {/* ── Section: Logo Showcase Container ── */}
       <div className="mx-auto max-w-6xl px-4">
         <div className="mb-8 max-w-2xl space-y-2">

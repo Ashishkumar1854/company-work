@@ -25,28 +25,28 @@ export default function Services() {
   const bottomRow = servicesData.slice(3);
 
   return (
-    <motion.section {...motionProps} className="py-10 sm:py-12 lg:py-14">
+    <motion.section {...motionProps} className="py-4 sm:py-6">
       {/* ── Section: Services Container ── */}
       <div className="mx-auto max-w-6xl px-4">
-        <div className="mb-6 max-w-2xl space-y-2">
+        <div className="mb-3 max-w-2xl space-y-1">
           {/* ── Section: Services Heading ── */}
           <h2>Our Services</h2>
         </div>
 
-        <div className="space-y-5">
+        <div className="space-y-4">
           {/* ── Section: Services Top Row ── */}
-          <div className="grid gap-6 lg:grid-cols-3">
+          <div className="grid gap-4 lg:grid-cols-3">
             {topRow.map((service) => (
               <Card key={service.id} className="hover:-translate-y-1">
-                <div className="flex h-full flex-col p-6">
+                <div className="flex h-full flex-col p-5">
                   <Badge className="w-fit">{service.kicker}</Badge>
-                  <h3 className="mt-5 text-[1.55rem]">{service.title}</h3>
-                  <p className="mt-4 flex-1 leading-7 text-gray-muted">
+                  <h3 className="mt-4 text-[1.5rem]">{service.title}</h3>
+                  <p className="mt-3 flex-1 leading-7 text-gray-muted">
                     {service.description}
                   </p>
                   <Link
                     href={service.href}
-                    className="mt-8 inline-flex items-center gap-2 font-bold text-brand transition-transform duration-200 hover:translate-x-1"
+                    className="mt-6 inline-flex items-center gap-2 font-bold text-brand transition-transform duration-200 hover:translate-x-1"
                   >
                     <span>Get a quote</span>
                     <FaArrowRight className="text-sm" />
@@ -57,18 +57,18 @@ export default function Services() {
           </div>
 
           {/* ── Section: Services Bottom Row ── */}
-          <div className="grid gap-6 lg:grid-cols-2">
+          <div className="grid gap-4 lg:grid-cols-2">
             {bottomRow.map((service) => (
               <Card key={service.id} className="hover:-translate-y-1">
-                <div className="flex h-full flex-col p-6">
+                <div className="flex h-full flex-col p-5">
                   <Badge className="w-fit">{service.kicker}</Badge>
-                  <h3 className="mt-5 text-[1.55rem]">{service.title}</h3>
-                  <p className="mt-4 flex-1 leading-7 text-gray-muted">
+                  <h3 className="mt-4 text-[1.5rem]">{service.title}</h3>
+                  <p className="mt-3 flex-1 leading-7 text-gray-muted">
                     {service.description}
                   </p>
                   <Link
                     href={service.href}
-                    className="mt-8 inline-flex items-center gap-2 font-bold text-brand transition-transform duration-200 hover:translate-x-1"
+                    className="mt-6 inline-flex items-center gap-2 font-bold text-brand transition-transform duration-200 hover:translate-x-1"
                   >
                     <span>Get a quote</span>
                     <FaArrowRight className="text-sm" />

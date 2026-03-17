@@ -76,7 +76,7 @@ Goal: ${formData.goal}`;
   };
 
   return (
-    <motion.section {...motionProps} id="booking" className="py-10 sm:py-12 lg:py-14">
+    <motion.section {...motionProps} id="booking" className="py-4 sm:py-6">
       {/* ── Section: Booking Container ── */}
       <div className="mx-auto max-w-6xl px-4">
         <div className="mb-6 max-w-2xl space-y-2">
