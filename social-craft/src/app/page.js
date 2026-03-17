@@ -8,7 +8,6 @@ import Hero from "@/components/sections/Hero";
 import Clients from "@/components/sections/Clients";
 import Services from "@/components/sections/Services";
 import Portfolio from "@/components/sections/Portfolio";
-import LogoShowcase from "@/components/sections/LogoShowcase";
 import Testimonials from "@/components/sections/Testimonials";
 import BookingForm from "@/components/sections/BookingForm";
 
@@ -35,9 +34,6 @@ export default function HomePage() {
 
       {/* ── Section: Homepage Portfolio ── */}
       <Portfolio />
-
-      {/* ── Section: Homepage Logo Showcase ── */}
-      <LogoShowcase />
 
       {/* ── Section: Homepage Testimonials ── */}
       <Testimonials />

@@ -25,18 +25,15 @@ export default function Services() {
   const bottomRow = servicesData.slice(3);
 
   return (
-    <motion.section {...motionProps} className="py-20">
+    <motion.section {...motionProps} className="py-10 sm:py-12 lg:py-14">
       {/* ── Section: Services Container ── */}
       <div className="mx-auto max-w-6xl px-4">
-        <div className="mb-12 max-w-2xl space-y-3">
+        <div className="mb-6 max-w-2xl space-y-2">
           {/* ── Section: Services Heading ── */}
-          <p className="text-sm font-semibold uppercase tracking-[0.2em] text-gray-muted">
-            What we do
-          </p>
           <h2>Our Services</h2>
         </div>
 
-        <div className="space-y-6">
+        <div className="space-y-5">
           {/* ── Section: Services Top Row ── */}
           <div className="grid gap-6 lg:grid-cols-3">
             {topRow.map((service) => (

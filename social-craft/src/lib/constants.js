@@ -111,6 +111,7 @@ export const portfolioData = [
     category: "videos",
     thumbnail: "/images/portfolio/p2.jpg",
     description: "Hook + captions, higher retention",
+    videoUrl: "https://www.instagram.com/phoneoseller/reel/DV6Dup1gQe9/",
   },
   {
     id: 3,

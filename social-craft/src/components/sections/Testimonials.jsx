@@ -19,14 +19,11 @@ const motionProps = {
 
 export default function Testimonials() {
   return (
-    <motion.section {...motionProps} className="py-20">
+    <motion.section {...motionProps} className="py-10 sm:py-12 lg:py-14">
       {/* ── Section: Testimonials Container ── */}
       <div className="mx-auto max-w-6xl px-4">
-        <div className="mb-12 max-w-2xl space-y-3">
+        <div className="mb-6 max-w-2xl space-y-2">
           {/* ── Section: Testimonials Heading ── */}
-          <p className="text-sm font-semibold uppercase tracking-[0.2em] text-gray-muted">
-            Social proof
-          </p>
           <h2>Customer Reviews</h2>
           <p className="text-base leading-7 text-gray-muted">
             Trust earned with consistent delivery

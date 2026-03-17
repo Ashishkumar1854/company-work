@@ -20,10 +20,10 @@ const marqueeItems = [...clientChips, ...clientChips];
 
 export default function Clients() {
   return (
-    <motion.section {...motionProps} className="py-20">
+    <motion.section {...motionProps} className="py-10 sm:py-12 lg:py-14">
       {/* ── Section: Clients Container ── */}
       <div className="mx-auto max-w-6xl px-4">
-        <div className="mb-10 flex items-center justify-center gap-4">
+        <div className="mb-6 flex items-center justify-center gap-4">
           {/* ── Section: Ornament Title ── */}
           <span className="hidden h-px flex-1 bg-black/10 sm:block" />
           <p className="text-center text-sm font-semibold uppercase tracking-[0.24em] text-gray-muted">

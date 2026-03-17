@@ -76,10 +76,10 @@ Goal: ${formData.goal}`;
   };
 
   return (
-    <motion.section {...motionProps} id="booking" className="py-20">
+    <motion.section {...motionProps} id="booking" className="py-10 sm:py-12 lg:py-14">
       {/* ── Section: Booking Container ── */}
       <div className="mx-auto max-w-6xl px-4">
-        <div className="mb-12 max-w-2xl space-y-3">
+        <div className="mb-6 max-w-2xl space-y-2">
           {/* ── Section: Booking Heading ── */}
           <p className="text-sm font-semibold uppercase tracking-[0.2em] text-gray-muted">
             Start here

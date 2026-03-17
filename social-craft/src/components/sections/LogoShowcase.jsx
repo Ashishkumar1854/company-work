@@ -28,10 +28,10 @@ const logoNames = [
 
 export default function LogoShowcase() {
   return (
-    <motion.section {...motionProps} className="py-20">
+    <motion.section {...motionProps} className="py-12 sm:py-14 lg:py-16">
       {/* ── Section: Logo Showcase Container ── */}
       <div className="mx-auto max-w-6xl px-4">
-        <div className="mb-12 max-w-2xl space-y-3">
+        <div className="mb-8 max-w-2xl space-y-2">
           {/* ── Section: Logo Showcase Heading ── */}
           <p className="text-sm font-semibold uppercase tracking-[0.2em] text-gray-muted">
             Brand exposure

@@ -28,8 +28,8 @@ module.exports = {
         whatsapp: "#25D366",
       },
       fontFamily: {
-        sans: ["Inter", "sans-serif"],
-        serif: ['"Playfair Display"', "serif"],
+        sans: ["Manrope", "system-ui", "sans-serif"],
+        serif: ["Fraunces", "serif"],
       },
       borderRadius: {
         card: "22px",

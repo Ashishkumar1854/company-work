@@ -56,18 +56,18 @@ export default function Hero() {
   return (
     <motion.section
       {...motionProps}
-      className="min-h-[85vh] px-4 pb-16 pt-20"
+      className="min-h-[70vh] px-4 pb-8 pt-14 sm:pb-10 sm:pt-16"
     >
       {/* ── Section: Hero Content Wrapper ── */}
-      <div className="mx-auto grid max-w-6xl items-center gap-12 lg:grid-cols-[1.25fr_0.9fr] lg:gap-16">
-        <div className="space-y-8">
+      <div className="mx-auto grid max-w-6xl items-center gap-8 lg:grid-cols-[1.2fr_0.85fr] lg:gap-10">
+        <div className="space-y-6">
           {/* ── Section: Hero Left Column ── */}
           <Badge className="gap-2">
             <FaStar className="text-xs" />
             Creative system for growth-focused brands
           </Badge>
 
-          <div className="space-y-5">
+          <div className="space-y-4">
             <h1 className="max-w-3xl leading-[1.05]">
               A creative agency built for brands that want consistent growth.
             </h1>
@@ -96,7 +96,7 @@ export default function Hero() {
           </div>
 
           {/* ── Section: Hero Badge Row ── */}
-          <div className="flex flex-wrap gap-3">
+          <div className="flex flex-wrap gap-2">
             {heroBadges.map((item) => (
               <Badge key={item} variant="gray">
                 {item}
@@ -106,11 +106,11 @@ export default function Hero() {
         </div>
 
         {/* ── Section: Hero Right Card ── */}
-        <div className="rounded-card border border-black/10 bg-white p-5 shadow-card sm:p-6">
-          <div className="space-y-5">
-            <div className="rounded-[20px] border border-dashed border-brand/20 bg-[linear-gradient(135deg,rgba(29,78,216,0.16),rgba(242,244,247,0.85),rgba(148,163,184,0.18))] p-5">
+        <div className="rounded-card border border-black/10 bg-white p-4 shadow-card sm:p-5">
+          <div className="space-y-4">
+            <div className="rounded-[18px] border border-dashed border-brand/20 bg-[linear-gradient(135deg,rgba(29,78,216,0.16),rgba(242,244,247,0.85),rgba(148,163,184,0.18))] p-4">
               {/* ── Section: Decorative Art Block ── */}
-              <div className="relative h-52 overflow-hidden rounded-[18px] border border-dashed border-black/10 bg-[radial-gradient(circle_at_top_left,rgba(37,99,235,0.2),transparent_38%),linear-gradient(180deg,rgba(255,255,255,0.8),rgba(242,244,247,0.92))]">
+              <div className="relative h-52 overflow-hidden rounded-[16px] border border-dashed border-black/10 bg-[radial-gradient(circle_at_top_left,rgba(37,99,235,0.2),transparent_38%),linear-gradient(180deg,rgba(255,255,255,0.8),rgba(242,244,247,0.92))]">
                 <Image
                   src="/images/hero-craft-preview.svg"
                   alt="Creative showcase preview"
@@ -118,8 +118,8 @@ export default function Hero() {
                   className="object-cover"
                   priority
                 />
-                <div className="absolute inset-x-0 bottom-0 bg-[linear-gradient(180deg,transparent,rgba(11,18,32,0.65))] p-5">
-                  <p className="max-w-[14rem] font-serif text-2xl leading-tight text-white">
+                <div className="absolute inset-x-0 bottom-0 bg-[linear-gradient(180deg,transparent,rgba(11,18,32,0.65))] p-4">
+                  <p className="max-w-[12rem] font-serif text-lg leading-tight text-white">
                     Crafted for attention
                   </p>
                 </div>
@@ -127,19 +127,19 @@ export default function Hero() {
             </div>
 
             {/* ── Section: Metrics Grid ── */}
-            <div className="grid gap-4 sm:grid-cols-2">
+            <div className="grid gap-3 sm:grid-cols-2">
               {metrics.map((metric) => (
                 <div
                   key={metric.value}
-                  className="rounded-[20px] border border-black/10 bg-white p-5 shadow-[0_12px_34px_rgba(15,23,42,0.06)]"
+                  className="rounded-[18px] border border-black/10 bg-white p-3 shadow-[0_12px_34px_rgba(15,23,42,0.06)]"
                 >
                   {/* ── Section: Metric Icon ── */}
-                  <div className="mb-4 flex h-11 w-11 items-center justify-center rounded-2xl bg-blue-50 text-brand">
-                    <metric.icon className="text-[1.35rem]" />
+                  <div className="mb-2 flex h-9 w-9 items-center justify-center rounded-2xl bg-blue-50 text-brand">
+                    <metric.icon className="text-[1.1rem]" />
                   </div>
 
-                  <p className="font-serif text-2xl text-ink">{metric.value}</p>
-                  <p className="mt-2 text-sm leading-6 text-gray-muted">
+                  <p className="font-serif text-lg text-ink">{metric.value}</p>
+                  <p className="mt-1 text-xs leading-5 text-gray-muted">
                     {metric.label}
                   </p>
                 </div>
