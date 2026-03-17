@@ -79,7 +79,7 @@ Goal: ${formData.goal}`;
     <motion.section {...motionProps} id="booking" className="py-4 sm:py-6">
       {/* ── Section: Booking Container ── */}
       <div className="mx-auto max-w-6xl px-4">
-        <div className="mb-6 max-w-2xl space-y-2">
+        <div className="mb-6 max-w-2xl space-y-2 text-center mx-auto">
           {/* ── Section: Booking Heading ── */}
           <p className="text-sm font-semibold uppercase tracking-[0.2em] text-gray-muted">
             Start here

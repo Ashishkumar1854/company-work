@@ -28,7 +28,7 @@ export default function Services() {
     <motion.section {...motionProps} className="py-4 sm:py-6">
       {/* ── Section: Services Container ── */}
       <div className="mx-auto max-w-6xl px-4">
-        <div className="mb-3 max-w-2xl space-y-1">
+        <div className="mb-3 max-w-2xl space-y-1 text-center mx-auto">
           {/* ── Section: Services Heading ── */}
           <h2>Our Services</h2>
         </div>
