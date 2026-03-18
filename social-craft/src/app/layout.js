@@ -4,6 +4,7 @@
 // USES: next/font/google, Navbar, Footer, WhatsAppFloat, GoogleAnalytics, globals.css
 // ============================================
 
+import { Suspense } from "react";
 import { Inter, Playfair_Display } from "next/font/google";
 import Navbar from "@/components/layout/Navbar";
 import Footer from "@/components/layout/Footer";
@@ -73,7 +74,9 @@ export default function RootLayout({ children }) {
     <html lang="en">
       <body className={`${inter.variable} ${playfair.variable}`}>
         {/* ── Section: Google Analytics Scripts ── */}
-        <GoogleAnalytics />
+        <Suspense fallback={null}>
+          <GoogleAnalytics />
+        </Suspense>
 
         {/* ── Section: Shared Site Chrome ── */}
         <div className="relative flex min-h-screen flex-col">
